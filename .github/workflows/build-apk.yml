@@ -1,0 +1,47 @@
+name: Build Pathfolio APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download project
+        uses: actions/checkout@v4
+
+      - name: Install Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Find and extract project ZIP
+        run: |
+          ZIP_FILE=$(find . -maxdepth 1 -type f -iname "Pathfolio_Offline_CV_Portfolio_v3*.zip" | head -n 1)
+          if [ -z "$ZIP_FILE" ]; then
+            echo "Project ZIP file was not found."
+            exit 1
+          fi
+          mkdir -p extracted-project
+          unzip -o "$ZIP_FILE" -d extracted-project
+
+      - name: Build Android APK
+        run: gradle -p extracted-project assembleDebug --console=plain
+
+      - name: Upload generated APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Pathfolio-Offline-APK
+          path: extracted-project/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
