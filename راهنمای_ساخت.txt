@@ -1,0 +1,18 @@
+راهنمای ساخت اپلیکیشن Pathfolio
+
+1. برنامه Android Studio را در کمپیوتر نصب کنید.
+2. فولدر Pathfolio_Android_Native را از حالت ZIP بیرون کنید.
+3. در Android Studio گزینه Open را بزنید و همین فولدر را انتخاب کنید.
+4. صبر کنید تا Gradle Sync تکمیل شود. اگر Android SDK 35 خواسته شد، Install را بزنید.
+5. برای آزمایش، گوشی را با USB وصل و USB Debugging را فعال کنید، سپس Run را بزنید.
+6. برای ساخت APK از منوی Build گزینه Build App Bundles or APKs و سپس Build APKs را انتخاب کنید.
+
+مسیر APK آزمایشی:
+app/build/outputs/apk/debug/app-debug.apk
+
+عملکرد نسخه جدید:
+- Share or save PDF: پنجره اشتراک‌گذاری واقعی اندروید را باز می‌کند.
+- Open PDF / Print: PDF را در برنامه PDF Viewer باز می‌کند؛ سپس از منوی آن Print را انتخاب کنید.
+- ذخیره مستقیم: Android Document Picker را باز می‌کند و محل ذخیره را خود کاربر انتخاب می‌کند.
+
+نکته: برای بارگذاری کتابخانه‌های تولید PDF، اتصال اینترنت باید فعال باشد.
