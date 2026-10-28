@@ -1,0 +1,1 @@
+-keepclassmembers class org.eba.pathfolio.MainActivity$PdfBridge { public *; }
