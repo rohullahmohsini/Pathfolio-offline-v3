@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pathfolio</title>
+<meta name="description" content="An offline CV and Portfolio Builder.">
+<meta name="application-name" content="Pathfolio">
+<meta property="og:title" content="Pathfolio">
+<meta property="og:description" content="Create a professional CV or showcase your skills, projects and achievements in a personalized portfolio.">
+<meta name="referrer" content="no-referrer">
+<meta name="pathpolio-config" content="config.json">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#5b2d8e">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#f6f4fb;--card:#fff;--ink:#1d1b3a;--mute:#625f80;--line:#e3e0f0;--pur:#5b2d8e;--blu:#0b79c9;--tint:#efeafa;--amb:#f0a43b;--danger:#b4322b;--onacc:#fff;--sh:0 1px 2px rgba(29,27,58,.05),0 10px 28px rgba(29,27,58,.07);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0d22;--card:#1a1836;--ink:#eeedf8;--mute:#aaa7c8;--line:#2e2b52;--pur:#b194ea;--blu:#5cb5f2;--tint:#262250;--danger:#ff8a80;--onacc:#0e0c20;--sh:0 10px 28px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--bg:#0f0d22;--card:#1a1836;--ink:#eeedf8;--mute:#aaa7c8;--line:#2e2b52;--pur:#b194ea;--blu:#5cb5f2;--tint:#262250;--danger:#ff8a80;--onacc:#0e0c20;--sh:0 10px 28px rgba(0,0,0,.35)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.6;font-size:16px;background:radial-gradient(900px 520px at 105% -8%,rgba(11,121,201,.15),transparent 62%),radial-gradient(820px 520px at -10% 2%,rgba(91,45,142,.17),transparent 58%),var(--bg);background-attachment:fixed}
+h1,h2,h3,.cv .hero h2{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif}
+.wrap{max-width:780px;margin:0 auto;padding:16px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0 18px}
+.brand{flex:1;min-width:0}
+.brand b{display:block;font-family:Georgia,serif;font-size:19px;font-weight:700;line-height:1.25}
+.brand span{color:var(--mute);font-size:14px;letter-spacing:.04em}
+.tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;box-shadow:var(--sh)}
+.tabs button{border:0;background:none;color:var(--mute);font:inherit;font-weight:600;padding:6px 16px;border-radius:9px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--pur);color:var(--onacc)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--blu);outline-offset:2px}
+.progress,section.box,.rev,.sendto{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh)}
+.progress{padding:12px 16px;margin-bottom:16px}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pur),var(--blu));width:0;transition:width .3s}
+section.box{padding:18px;margin-bottom:16px}
+section.box h2{font-size:20px;margin:0 0 12px;font-weight:700;display:flex;align-items:center;gap:10px}
+section.box h2:before{content:"";width:5px;height:20px;border-radius:3px;background:linear-gradient(var(--amb),var(--pur))}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.grid{grid-template-columns:1fr}}
+label{display:block;font-size:14px;color:var(--mute);font-weight:600}
+input,textarea,select{width:100%;margin-top:3px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:84px;resize:vertical}
+.full{grid-column:1/-1}
+.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;background:var(--pur);color:var(--onacc);font:inherit;font-weight:600;padding:9px 16px;border-radius:10px;cursor:pointer}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.up .pv{width:68px;height:68px;font-size:12px}
+#up,[data-pup]{padding:6px 12px;font-size:14px;gap:6px}
+.up{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.pv{border:1px dashed var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--bg);flex:none;color:var(--mute);text-align:center}
+.pv img{width:100%;height:100%;object-fit:cover}
+.item{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--bg)}
+.item .row,.mp .row{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.nw{white-space:nowrap}
+.mute{color:var(--mute);font-size:14px}
+.del{background:none;border:0;color:var(--danger);cursor:pointer;font:inherit;font-size:14px}
+.del.ed{color:var(--blu)}
+.chip{display:inline-block;background:var(--tint);color:var(--pur);border-radius:20px;padding:0 12px;font-size:13px;margin:2px 4px 2px 0;font-weight:600}
+.empty{color:var(--mute);font-size:14px;margin:8px 0 0}
+a{color:var(--blu)}
+.lb{display:flex;align-items:center;gap:6px}
+.lb svg{flex:none;color:var(--pur)}
+.hint{display:block;font-size:12.5px;font-weight:400;color:var(--mute);margin-top:3px}
+.stack{display:grid;gap:10px;margin-top:10px}
+.pw{position:relative;display:block}
+.pw input{padding-inline-end:48px}
+.eye{position:absolute;inset-inline-end:2px;bottom:0;width:44px;height:44px;border:0;background:none;color:var(--mute);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chipbtn{border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-weight:600;padding:7px 14px;border-radius:20px;cursor:pointer}
+.chipbtn[aria-pressed="true"]{background:var(--pur);color:var(--onacc);border-color:var(--pur)}
+.guide{display:flex;gap:12px;align-items:flex-start;background:var(--tint);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:15px}
+.guide svg{flex:none;color:var(--pur);margin-top:2px}
+.guide a{display:inline-flex;align-items:center;gap:6px;font-weight:700;margin-top:4px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.mgrid{grid-template-columns:1fr}}
+.mp{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--bg)}
+.mp .sq{width:100%;aspect-ratio:1/1;border:1px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--mute);font-size:13px;margin:8px 0;background:var(--card)}
+.mp .sq img{width:100%;height:100%;object-fit:cover}
+.badge{display:inline-flex;align-items:center;gap:5px;background:var(--tint);color:var(--pur);border-radius:20px;padding:1px 10px;font-size:12px;font-weight:700}
+.stat{font-weight:700;margin:6px 0 10px}.stat.ok{color:#2e9e6a}.stat.no{color:var(--danger)}
+.rev{padding:14px 16px;margin:14px 0 4px}
+.rev h2{font-size:18px;margin:0 0 6px}
+.rev .ok{color:#2e9e6a}.rev .no{color:var(--danger)}.rev .wn{color:#b7791f}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;color:var(--ink);font-weight:600}
+.chk input{width:auto;margin-top:5px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.sendto{display:flex;align-items:center;gap:14px;background:var(--tint);padding:14px 16px;margin-bottom:16px;font-weight:600}
+.sendto svg{flex:none;color:var(--pur)}
+.sendto a{font-size:18px;font-weight:800;word-break:break-all}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:20px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;text-align:center;max-width:92vw}
+.toast.show{opacity:1}
+.toast.err{background:var(--danger);color:#fff;bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+/* portfolio sheet (always light, also used for the PDF) */
+.cv{background:#fff;color:#1d1b3a;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--sh);--ink:#1d1b3a;--mute:#625f80;--line:#e3e0f0;--pur:#5b2d8e;--blu:#0b79c9;--tint:#efeafa}
+.cv .inst{display:flex;align-items:baseline;gap:10px;justify-content:space-between;padding:12px 24px;border-bottom:1px solid #e3e0f0;font-size:13px;color:#625f80}
+.cv .inst b{font-family:Georgia,serif;font-size:15px;color:#1d1b3a}
+.cv .hero{position:relative;display:grid;grid-template-columns:1fr minmax(240px,310px);gap:20px;align-items:center;padding:26px 24px;background:linear-gradient(120deg,#4a2480,#0b79c9);color:#fff;overflow:hidden}
+.cv .hero:before{content:"";position:absolute;right:-70px;bottom:-110px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.08)}
+.cv .hero:after{content:"";position:absolute;left:-50px;top:-90px;width:190px;height:190px;border-radius:50%;background:rgba(240,164,59,.18)}
+.cv .who{position:relative;z-index:1;display:flex;align-items:center;gap:16px;min-width:0}
+.cv .ht{min-width:0}
+.cv .hero h2{margin:0;font-size:30px;font-weight:700;line-height:1.15}
+.cv .hero p{margin:6px 0 0;opacity:.92;font-size:14px}
+.cv .av{width:104px;height:104px;border-radius:50%;object-fit:cover;border:4px solid #fff;flex:none;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.cv .panel{position:relative;z-index:1;background:rgba(255,255,255,.97);color:#1d1b3a;border-radius:14px;padding:12px 14px;font-size:12.5px;line-height:1.45}
+.cv .panel h4{margin:0 0 4px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#5b2d8e}
+.cv .panel h4.gap{margin-top:9px;padding-top:8px;border-top:1px solid #e3e0f0}
+.cv .pi{display:flex;align-items:center;gap:7px;padding:1.5px 0}
+.cv .pi svg{flex:none}
+.cv .pi .k{color:#625f80;min-width:58px}
+.cv .pi .v{font-weight:600;word-break:break-all;min-width:0}
+@media (max-width:640px){.cv .hero{grid-template-columns:1fr}}
+.cv .body{padding:6px 24px 22px}
+.cv h3{font-size:19px;margin:24px 0 8px;font-weight:700;color:#5b2d8e;display:flex;align-items:center;gap:10px}
+.cv h3:after{content:"";flex:1;height:2px;background:linear-gradient(90deg,#efeafa,transparent)}
+.cv .bio{font-size:15px}
+.cv .entry{padding:9px 0;border-bottom:1px dashed #e3e0f0}
+.cv .entry:last-child{border:0}
+.cv .sub{font-weight:700;margin:14px 0 6px;color:#1d1b3a;font-size:14px;letter-spacing:.03em}
+.cv .agrid{display:grid;gap:14px}
+.cv .agrid.g3{grid-template-columns:repeat(3,1fr)}
+.cv .agrid.g2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:520px){.cv .agrid.g3{grid-template-columns:repeat(2,1fr)}}
+.cv .pcard{border:1px solid #e3e0f0;border-radius:14px;padding:10px;background:#fff}
+.cv .pcard .sq{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#efeafa,#e2f0fb);border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.cv .pcard .sq img{width:100%;height:100%;object-fit:cover}
+.cv .pcard b{display:block;margin-top:6px;font-size:14px;line-height:1.3}
+.cv .badge{margin-top:2px}
+.cv .lnk{display:flex;gap:6px;align-items:flex-start;font-size:12px;margin-top:6px}
+.cv .lnk svg{flex:none;margin-top:2px}
+.cv .lnk small{display:block;color:#625f80;font-size:11px;font-weight:700}
+.cv .lnk a{font-weight:700}
+.cv .foot{margin-top:24px;padding-top:10px;border-top:1px solid #e3e0f0;color:#625f80;font-size:13px}
+@media print{.top,.progress,.toast,.noprint{display:none!important}body{background:#fff}.cv{border:0;box-shadow:none}}
+[hidden]{display:none!important}
+.tabs{display:none}
+.hello{padding:6px 2px 18px}.hello h1{margin:0 0 6px;font-size:32px}
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:10px}
+@media (max-width:640px){.cards2{grid-template-columns:1fr}}
+.hcard{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:start;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--sh);cursor:pointer;font:inherit;color:var(--ink);transition:transform .15s,border-color .15s}
+.hcard:hover{transform:translateY(-3px);border-color:var(--pur)}
+.hcard b{font-family:Georgia,serif;font-size:23px}
+.hcard .d{color:var(--mute);font-size:15px}
+.hic{display:inline-flex;width:58px;height:58px;border-radius:16px;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pur),var(--blu));color:#fff}
+.hcard .badge{margin-top:6px}
+.btn.big{font-size:17px;padding:13px 22px;border-radius:14px}
+.btn.danger{background:var(--danger);color:#fff}
+.previewbar{text-align:center;margin:8px 0 20px;padding:20px;border:1px dashed var(--line);border-radius:16px;background:var(--card)}
+.previewbar p{margin:8px 0 0}
+.modal{position:fixed;inset:0;background:rgba(15,13,34,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.mbox{background:var(--card);color:var(--ink);border-radius:16px;padding:20px;max-width:380px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.mbox p{margin:0 0 6px;font-weight:600}
+.addf{display:flex;gap:10px;align-items:flex-end;margin-top:14px}.addf label{flex:1}
+.ufh{display:flex;gap:10px;align-items:flex-end;margin-bottom:10px}.ufh label{flex:1}
+.blk{margin-top:22px;padding-top:14px;border-top:1px dashed var(--line)}
+.blk h3.mini{font-family:inherit;font-size:16px;margin:0 0 4px}
+.bi{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--bg)}
+.bi .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bimg{width:100%;min-height:90px;max-height:220px;display:flex;align-items:center;justify-content:center;border:1px dashed var(--line);border-radius:10px;overflow:hidden;color:var(--mute);margin-bottom:8px;background:var(--card)}
+.bimg img{max-width:100%;max-height:220px;object-fit:contain}
+.aico{display:inline-flex;vertical-align:middle;margin-inline-end:6px;color:var(--pur)}
+.sech{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.sech h2{margin:0!important}
+.secbtn{display:flex;gap:6px;align-items:center}
+.chk.inl{margin:0 6px 0 0;font-weight:600}
+.ico{width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+/* CD-style music covers */
+.cd{position:relative;width:100%;max-width:210px;margin:0 auto 12px;aspect-ratio:1/1;border-radius:50%;overflow:hidden;background:radial-gradient(circle,#3a3558 0,#14122a 72%);box-shadow:0 8px 18px rgba(20,18,42,.35),0 0 0 3px #d9d4ea,0 0 0 5px #fff}
+.cd img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover}
+.cd .cdph{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.cd .rg{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.3)}
+.cd .r1{left:9%;top:9%;right:9%;bottom:9%}
+.cd .r2{left:20%;top:20%;right:20%;bottom:20%;border-color:rgba(255,255,255,.2)}
+.cd .sheen{position:absolute;left:0;top:0;width:100%;height:100%;border-radius:50%;background:linear-gradient(115deg,rgba(255,255,255,.4) 0%,rgba(255,255,255,0) 28%,rgba(255,255,255,0) 58%,rgba(255,255,255,.28) 74%,rgba(255,255,255,0) 90%)}
+.cd .hole{position:absolute;left:41.5%;top:41.5%;width:17%;height:17%;border-radius:50%;background:var(--card,#fff);border:3px solid rgba(255,255,255,.8);box-shadow:inset 0 0 0 2px rgba(20,18,42,.4),0 0 0 2px rgba(20,18,42,.25)}
+.cv .cd .hole{background:#fff}
+.cv .pcard .cd{margin-top:4px}
+/* sheet refinements */
+.cv .hero{padding:30px 26px}
+.cv .av{width:116px;height:116px}
+.cv .hero h2{font-size:36px;letter-spacing:.2px}
+@media (max-width:640px){.cv .who{flex-direction:column;text-align:center}.cv .hero{gap:18px}}
+.cv .about{margin:20px 0 6px;padding:16px 20px;background:#faf8ff;border:1px solid #e3e0f0;border-inline-start:5px solid #5b2d8e;border-radius:14px}
+.cv .about h3{margin:0 0 8px;font-size:18px}.cv .about h3:after{display:none}
+.cv .about .bio{font-family:Georgia,"Iowan Old Style",serif;font-size:16.5px;line-height:1.8;color:#2a2750}
+.cv .acard{display:flex;gap:14px;align-items:flex-start;margin:12px 0;padding:14px 16px;border:1.5px solid #cdbfe6;border-radius:16px;background:#fff;box-shadow:0 0 0 4px #f6f2fc}
+.cv .aic{flex:none;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#5b2d8e,#0b79c9)}
+.cv .abody{min-width:0}
+.cv .atitle{display:block;font-family:Georgia,serif;font-size:18px;line-height:1.3;color:#1d1b3a}
+.cv .ameta{color:#625f80;font-size:13px;margin-top:3px}
+.cv .alink{margin-top:4px;font-size:13px;font-weight:700}
+.cv .blkc{margin:10px 0;padding:12px 14px;border:1px solid #e3e0f0;border-radius:12px;background:#fff}
+.cv .blkc.txt{background:#faf8ff;border-inline-start:5px solid #5b2d8e;font-family:Georgia,serif;line-height:1.7;font-size:15px}
+.cv .blkc.txt b{display:block;margin-bottom:2px;font-size:16px}
+.cv .blkc.lkb{display:flex;align-items:center;gap:10px;font-weight:600}
+.cv .blkc.lkb span{flex:1;min-width:0}
+.cv .blkc.imgb{margin-left:0;margin-right:0;text-align:center}
+.cv .blkc.imgb img{max-width:100%;max-height:340px;object-fit:contain;border-radius:8px;background:#f4f1fb}
+.cv .blkc.imgb figcaption{margin-top:6px;font-size:13px;color:#625f80}
+/* CV document */
+.cv.cvs .cvh{display:flex;align-items:center;gap:20px;padding:28px 26px 20px}
+.cvs .av2{width:104px;height:104px;border-radius:50%;object-fit:cover;border:3px solid #efeafa;flex:none}
+.cvs .cvht{min-width:0;flex:1}
+.cvs .cvht h2{margin:0;font-family:Georgia,serif;font-size:34px;color:#1d1b3a;line-height:1.15}
+.cvs .role{margin:4px 0 10px;color:#5b2d8e;font-weight:700;letter-spacing:.04em}
+.cvs .cvc{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:#2a2750}
+.cvs .cc{display:inline-flex;align-items:center;gap:6px}
+.cvs .cvrule{height:6px;background:linear-gradient(90deg,#4a2480,#0b79c9,#f0a43b)}
+.cvs .cve{padding:9px 0;border-bottom:1px dashed #e3e0f0}
+.cvs .cve:last-child{border:0}
+.cvs .cvt{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.cvs .dt{color:#625f80;font-size:13px;white-space:nowrap}
+.cvs .org{color:#5b2d8e;font-weight:600;font-size:14px}
+.cvs .cve p{margin:4px 0 0;font-size:14px;line-height:1.6}
+.cvs .cvl{margin-top:3px;font-size:13px;font-weight:700;display:flex;gap:6px;align-items:center}
+.cvs .chipsrow{display:flex;flex-wrap:wrap;gap:8px}
+.cvs .skl{border:1.5px solid #cdbfe6;border-radius:20px;padding:3px 12px;font-weight:600;font-size:14px;background:#faf8ff}
+.cvs .skl small{color:#625f80;font-weight:500;margin-left:6px}
+@media (max-width:520px){.cv.cvs .cvh{flex-direction:column;text-align:center}.cvs .cvc{justify-content:center}}
+.hcard .hart{width:100%;height:auto;border-radius:14px;margin-bottom:6px;display:block}
+.kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--pur)}
+.tplrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (min-width:640px){.tgrid{grid-template-columns:repeat(3,1fr)}}
+.tcard{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:start;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px;cursor:pointer;font:inherit;color:var(--ink);box-shadow:var(--sh);transition:transform .15s,border-color .15s}
+.tcard:hover{transform:translateY(-3px);border-color:var(--pur)}
+.tcard.sel{border-color:var(--pur);box-shadow:0 0 0 3px rgba(91,45,142,.22)}
+.tcard b{font-family:Georgia,serif;font-size:16px;line-height:1.25}
+.tcard .mute{font-size:13px;line-height:1.35}
+.tthumb{position:relative;width:100%;aspect-ratio:794/1123;overflow:hidden;background:#fff;border-radius:10px;border:1px solid var(--line)}
+.tin{position:absolute;left:0;top:0;width:794px;transform-origin:top left;pointer-events:none}
+.fit{overflow:hidden;border-radius:14px;box-shadow:var(--sh);border:1px solid var(--line);background:#fff}
+.cvsheet{background:#fff}
+@media print{.fit{height:auto!important;border:0;box-shadow:none;border-radius:0}.cvsheet{transform:none!important;width:100%!important}}
+/* CV templates */
+.cvd{--ac:#1f3a5f;--ac2:#c9a227;--tx:#1d1b3a;--mu:#5d5a78;--ln:#e3e0f0;--sb:#f3f4f8;--sbt:#1d1b3a;--tint:#f6f4fb;--hd:Georgia,"Iowan Old Style","Palatino Linotype",serif;--bf:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#fff;color:var(--tx);font-family:var(--bf);font-size:14px;line-height:1.55;position:relative;overflow:hidden}
+.cvd *{box-sizing:border-box}
+.cvd a{color:var(--ac);font-weight:700}
+.cvd .nm{font-family:var(--hd);font-size:34px;line-height:1.1;margin:0;font-weight:700}
+.cvd .ro{margin:4px 0 0;font-weight:600;letter-spacing:.04em;color:var(--ac)}
+.cvd .ph{width:104px;height:104px;border-radius:50%;object-fit:cover;flex:none;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.cvd .ct{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;margin-top:8px}
+.cvd .ci{display:inline-flex;align-items:center;gap:6px}
+.cvd .ci svg{flex:none}
+.cvd .ci small{opacity:.8}
+.cvd .sh{font-family:var(--hd);font-size:14.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--ac);margin:0 0 6px;display:flex;align-items:center;gap:8px;font-weight:700}
+.cvd .sec{margin-top:15px}
+.cvd .e{padding:6px 0}
+.cvd .e+.e{border-top:1px dashed var(--ln)}
+.cvd .t{display:flex;justify-content:space-between;gap:10px;font-weight:700;align-items:baseline}
+.cvd .dt{color:var(--mu);font-size:12px;font-weight:500;white-space:nowrap}
+.cvd .og{color:var(--ac);font-weight:600;font-size:13px}
+.cvd .e p{margin:3px 0 0;font-size:13px}
+.cvd .lk{margin-top:3px;font-size:12.5px}
+.cvd .chs{display:flex;flex-wrap:wrap;gap:6px}
+.cvd .chs span{border:1.5px solid var(--ac);color:var(--tx);border-radius:16px;padding:2px 10px;font-weight:600;font-size:12.5px;background:#fff}
+.cvd .chs small{color:var(--mu);font-weight:500;margin-inline-start:5px}
+.cvd .ab{margin-top:4px;font-size:13.5px;line-height:1.7}
+.cvd .ft{margin-top:18px;padding-top:8px;border-top:1px solid var(--ln);color:var(--mu);font-size:11.5px}
+.cvd .hs-line .sh,.cvd.hs-line .sh{border-bottom:2px solid var(--ac);padding-bottom:3px}
+.cvd.hs-bar .sh:before{content:"";width:5px;height:15px;border-radius:3px;background:var(--ac2)}
+.cvd.hs-pill .sh{display:inline-flex;background:var(--ac);color:#fff;padding:3px 14px;border-radius:20px;text-transform:none;letter-spacing:.03em}
+.cvd.hs-center .sh{justify-content:center;border-bottom:1px solid var(--ln);padding-bottom:4px}
+.cvd .hd{display:flex;gap:20px;align-items:center;padding:28px 30px 14px}
+.cvd .rule{height:4px;background:linear-gradient(90deg,var(--ac),var(--ac2));margin:0 30px}
+.cvd .bd{padding:6px 30px 28px}
+.L-banner .bn{background:linear-gradient(120deg,var(--ac),var(--ac2));color:#fff;padding:30px;display:flex;gap:20px;align-items:center}
+.L-banner .bn .ro,.L-banner .bn a{color:#fff}
+.L-banner .bd{padding:6px 30px 28px}
+.L-minimal .hd{flex-direction:column;text-align:center;padding:30px 36px 8px;gap:6px}
+.L-minimal .ph{width:88px;height:88px}
+.L-minimal .ct{justify-content:center}
+.L-minimal .bd{padding:6px 36px 28px}
+.L-sideL,.L-sideR{display:grid;grid-template-columns:31% 1fr;min-height:1030px}
+.L-sideR{grid-template-columns:1fr 31%}
+.cvd .sd{background:var(--sb);color:var(--sbt);padding:26px 18px}
+.cvd .sd .sh{color:var(--sdh,var(--sbt));font-size:13px}
+.cvd .sd a{color:inherit;text-decoration:underline}
+.cvd .sd .ph{width:118px;height:118px;display:block;margin:0 auto 16px}
+.cvd .sd .ct{flex-direction:column;gap:7px;margin:0 0 6px}
+.cvd .sd .ci{word-break:break-word;align-items:flex-start}
+.cvd .sd .chs span{background:transparent;border-color:currentColor;color:inherit}
+.cvd .sd .chs small{color:inherit;opacity:.8}
+.cvd .sd .og,.cvd .sd .dt{color:inherit;opacity:.85}
+.cvd .mn{padding:28px 26px}
+.L-timeline .e{border-top:0!important;position:relative;padding:6px 0 8px;padding-inline-start:20px;margin-inline-start:6px;border-inline-start:2px solid var(--ac2)}
+.L-timeline .e:before{content:"";position:absolute;inset-inline-start:-8px;top:10px;width:12px;height:12px;border-radius:50%;background:var(--ac);border:2px solid #fff;box-shadow:0 0 0 2px var(--ac2)}
+.L-boxed .sec{background:var(--tint);border:1px solid var(--ln);border-radius:14px;padding:12px 16px}
+.L-boxed .bd{display:block}
+.L-split .cols{display:grid;grid-template-columns:1.3fr 1fr;gap:0 26px;align-items:start}
+/* ===== Pathfolio design system ===== */
+:root{--bg:#f7f6fb;--ok:#258a5b;--gold:#f0a43b;--grad:linear-gradient(135deg,#5b2d8e,#0b79c9)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ok:#4cc38a;--mute:#bcb9d8}}
+:root[data-theme="dark"]{--ok:#4cc38a;--mute:#bcb9d8}
+html,body{max-width:100%}
+.wrap{overflow-wrap:anywhere}
+.skip{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip:focus{width:auto;height:auto;clip:auto;inset-inline-start:12px;top:12px;z-index:100;background:#fff;color:#000;padding:10px 14px;border-radius:10px}
+header.top{background:var(--grad);color:#fff;border-radius:18px;padding:12px 14px;box-shadow:var(--sh);margin:4px 0 18px;gap:10px;flex-wrap:nowrap}
+.brandwrap{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+.blogo{height:46px;width:auto;max-width:110px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;flex:none}
+.brand .bt{display:block;font-family:Georgia,serif;font-size:25px;font-weight:700;line-height:1.1;color:#fff}
+.brand .bs{display:block;font-size:12.5px;line-height:1.35;color:rgba(255,255,255,.92)}
+.topr{display:flex;gap:8px;align-items:center;flex:none}
+.btn.light{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.5)}
+.langsel{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.5);border-radius:10px;padding:0 6px 0 10px;color:#fff;min-height:44px}
+.langsel select{background:transparent;border:0;color:#fff;font:inherit;font-weight:700;margin:0;padding:0 4px;width:auto;min-height:42px}
+.langsel select option{color:#1d1b3a;background:#fff}
+header.top :focus-visible{outline-color:#fff}
+@media (max-width:520px){header.top{padding:10px 12px}.brand .bt{font-size:21px}.brand .bs{font-size:11.5px}.topr .btn span:last-child{display:none}.topr .btn{padding:0 12px}.langsel select{max-width:84px}.blogo{height:38px}}
+button,select,.chipbtn,input:not([type=checkbox]):not([type=file]):not([type=radio]){min-height:44px}
+.btn{background:var(--grad);color:#fff;padding:10px 18px}
+.btn.ghost{background:none;color:var(--ink)}
+.btn svg,.chipbtn svg,.del svg,.sb svg{flex:none;width:16px;height:16px}
+.btn svg.i18,.btn svg.i20{width:18px;height:18px}
+.del{min-height:44px;padding:0 12px;display:inline-flex;align-items:center;gap:6px}
+.ico{width:44px;height:44px;min-height:44px;flex:none}
+.chipbtn{padding:0 16px;display:inline-flex;align-items:center;gap:8px}
+.chipbtn[aria-pressed="true"]{background:var(--grad);border-color:transparent;color:#fff}
+.chk input{width:22px;height:22px;min-height:0;flex:none}
+.chk{align-items:center;min-height:44px}
+:focus-visible{outline:3px solid var(--blu);outline-offset:2px}
+.ptitle{font-size:clamp(24px,5vw,32px);margin:0 0 14px;line-height:1.2}
+section.box h2{font-size:20px}
+.subh{font-family:Georgia,serif;font-size:17px;margin:20px 0 6px}
+.gd{margin:0 0 10px;font-size:13.5px;color:var(--mute)}
+.err{display:block;color:var(--danger);font-size:13px;font-weight:700;margin-top:4px}
+[aria-invalid="true"]{border-color:var(--danger)!important}
+.notice{background:var(--tint);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:12px;padding:10px 14px;margin:0 0 14px;font-size:14px}
+.notice[hidden]{display:none}
+/* status badges */
+.sb{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:3px 12px 3px 9px;font-size:13px;font-weight:700;border:1.5px solid;line-height:1.4;white-space:nowrap}
+.sb-none{color:#4b4968;background:#eeedf3;border-color:#bfbdd0}
+.sb-prog{color:#0a5a96;background:#e3f1fb;border-color:#8ec3ea}
+.sb-done{color:#1a6b45;background:#e3f5ec;border-color:#8dd0ae}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sb-none{color:#dcdaee;background:#2a2850;border-color:#5b5890}:root:not([data-theme="light"]) .sb-prog{color:#a9d8f8;background:#12304a;border-color:#2f6c9e}:root:not([data-theme="light"]) .sb-done{color:#a6e8c6;background:#12382a;border-color:#2f7d58}}
+:root[data-theme="dark"] .sb-none{color:#dcdaee;background:#2a2850;border-color:#5b5890}:root[data-theme="dark"] .sb-prog{color:#a9d8f8;background:#12304a;border-color:#2f6c9e}:root[data-theme="dark"] .sb-done{color:#a6e8c6;background:#12382a;border-color:#2f7d58}
+.stat.ok,.rev .ok{color:var(--ok)}
+/* welcome */
+.hero-home{padding:6px 2px 18px}
+.hero-home h1{margin:0 0 8px;font-size:clamp(28px,6vw,40px);line-height:1.15}
+.lead{font-size:17px;color:var(--mute);max-width:62ch;margin:0}
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:640px){.cards2{grid-template-columns:1fr}}
+.hcard{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:start;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:var(--sh);cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s}
+.hcard:hover{transform:translateY(-4px);border-color:var(--pur);box-shadow:0 14px 34px rgba(91,45,142,.18)}
+.hcard:focus-within{outline:3px solid var(--blu);outline-offset:3px;border-color:var(--pur)}
+.hcard .hart{width:100%;aspect-ratio:240/140;border-radius:14px;overflow:hidden;background:var(--tint);margin:0 0 4px}
+.hcard .hart svg,.hcard .hart img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
+.hcard h2{margin:0;font-size:24px;line-height:1.2}
+.hcard h2 button{all:unset;cursor:pointer;font-family:Georgia,serif;font-weight:700}
+.hcard h2 button::after{content:"";position:absolute;inset:0;border-radius:22px}
+.hcard h2 button:focus-visible{outline:none}
+.hcard .d{color:var(--mute);font-size:15px;margin:0}
+.kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--pur)}
+/* accordions */
+.acc-item{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:12px;box-shadow:var(--sh);overflow:hidden}
+.acc-row{display:flex;align-items:center}
+.acc-h{margin:0;flex:1;min-width:0}
+.acc-b{width:100%;display:flex;align-items:center;gap:10px;text-align:start;background:none;border:0;color:var(--ink);font:inherit;font-weight:700;padding:8px 12px;cursor:pointer;min-height:56px}
+.acc-b .fi{flex:none;width:38px;height:38px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:var(--grad);color:#fff}
+.acc-t{flex:1;min-width:0;font-family:Georgia,serif;font-size:17px;overflow-wrap:anywhere}
+.acc-st{flex:none}
+@media (max-width:480px){.acc-st .sb span{display:none}.acc-st .sb{padding:3px 6px}}
+.acc-b .chev{flex:none;transition:transform .25s}
+.acc-b[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.acc-mv{display:flex;align-items:center;padding-inline-end:4px}
+.acc-p{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .26s ease,visibility 0s linear .26s}
+.acc-p.open{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows .26s ease,visibility 0s}
+.acc-in{min-height:0;overflow:hidden}
+.acc-in>div{padding:4px 16px 18px}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* modal and bottom sheet */
+.modal{position:fixed;inset:0;background:rgba(15,13,34,.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:60}
+.mbox{background:var(--card);color:var(--ink);border-radius:18px;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));width:100%;max-width:520px;max-height:92vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.mbox.wide{max-width:720px}
+.mbox:focus{outline:none}
+.mh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.mh h2{margin:0;font-size:21px}
+.stepbox{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0 4px}
+.okmsg{display:inline-flex;align-items:center;gap:6px;color:var(--ok);font-weight:700}
+.shopts{display:grid;gap:10px;margin:10px 0}
+.shopts .btn{justify-content:flex-start;width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+@media (max-width:640px){.modal{align-items:flex-end;padding:0}.mbox{border-radius:22px 22px 0 0;max-width:none;animation:sheet .26s ease}@keyframes sheet{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}}
+/* templates picker */
+.tcat{font-size:20px;margin:26px 0 4px}
+.tcat+.mute{margin:0 0 10px}
+.tgrid{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:480px){.tgrid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:760px){.tgrid{grid-template-columns:repeat(3,1fr)}}
+.tcard{display:flex;flex-direction:column;align-items:stretch;gap:8px;text-align:start;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px;box-shadow:var(--sh);position:relative}
+.tcard.sel{border:4px solid var(--pur);padding:10px}
+.tcard b{font-family:Georgia,serif;font-size:17px;line-height:1.25}
+.tfor{display:inline-flex;align-self:flex-start;background:var(--tint);color:var(--pur);border-radius:20px;padding:2px 12px;font-size:12.5px;font-weight:800}
+.tsel{display:inline-flex;align-items:center;gap:6px;color:var(--ok);font-weight:800}
+.tcard .acts{margin:4px 0 0}
+.tcard .acts .btn{flex:1;justify-content:center}
+.tthumb{border-radius:12px;direction:ltr}
+.fit,.tthumb,.pvbox{direction:ltr}
+.pvbox{overflow:hidden;border-radius:12px;border:1px solid var(--line);background:#fff;position:relative}
+.pvbox .tin{position:absolute;left:0;top:0}
+/* RTL */
+html[dir="rtl"] body,html[dir="rtl"] .cvd,html[dir="rtl"] .cv,html[dir="rtl"] input,html[dir="rtl"] select,html[dir="rtl"] textarea,html[dir="rtl"] button{font-family:"Noto Naskh Arabic","Noto Sans Arabic","Vazirmatn","Segoe UI",Tahoma,"Geeza Pro","Arial Unicode MS",Arial,sans-serif}
+html[dir="rtl"] h1,html[dir="rtl"] h2,html[dir="rtl"] h3,html[dir="rtl"] h4,html[dir="rtl"] .bt,html[dir="rtl"] .nm,html[dir="rtl"] .sh,html[dir="rtl"] .acc-t,html[dir="rtl"] .atitle{font-family:"Noto Naskh Arabic","Noto Sans Arabic","Vazirmatn","Segoe UI",Tahoma,"Geeza Pro",Arial,sans-serif}
+html[dir="rtl"] *{letter-spacing:0!important}
+html[dir="rtl"] .kicker,html[dir="rtl"] .cvd .sh,html[dir="rtl"] .cv .panel h4{text-transform:none}
+html[dir="rtl"] [data-ic="back"] svg,html[dir="rtl"] .flip svg{transform:scaleX(-1)}
+html[dir="rtl"] .cv .hero:before{right:auto;left:-70px}
+html[dir="rtl"] .langsel{padding:0 10px 0 6px}
+/* print: true A4, text based, light colours only */
+@page{size:A4;margin:12mm;@bottom-center{content:"CV and Portfolio  |  " counter(page) " / " counter(pages);font:10px sans-serif;color:#625f80}}
+@media print{
+html,body{background:#fff!important;color:#1d1b3a;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+:root,:root[data-theme="dark"]{--bg:#fff;--card:#fff;--ink:#1d1b3a;--mute:#625f80;--line:#e3e0f0}
+.wrap{max-width:none;padding:0;overflow:visible}
+.top,.noprint,.toast,.modal,.skip,.notice,.tabs{display:none!important}
+.cv,.cvd,.cvsheet,.fit{overflow:visible!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+.fit{height:auto!important}
+.cvsheet{transform:none!important;width:100%!important}
+.L-sideL,.L-sideR{min-height:262mm}
+.e,.entry,.pcard,.acard,.blkc,.about,.dit,.pi,.cve,.skl,.sec>h3,.panel{break-inside:avoid;page-break-inside:avoid}
+h3,.sh,.sub{break-after:avoid;page-break-after:avoid}
+a{text-decoration:none}
+}
+/* CV template extras */
+.cvd .ph.sq{border-radius:16px}
+.cvd .bar2{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px}
+.cvd .bar2 span{flex:1;min-width:0}
+.cvd .bar2 i{flex:0 0 46%;height:7px;border-radius:4px;background:var(--ln);overflow:hidden}
+.cvd .bar2 b{display:block;height:100%;background:var(--ac2);border-radius:4px}
+.cvd .dtr{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0;font-size:13px}
+.cvd .dtr em{display:inline-flex;gap:3px;flex:none}
+.cvd .dtr u{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ln);text-decoration:none}
+.cvd .dtr u.on{background:var(--ac)}
+.cvd .sd .bar2 i,.cvd .sd .dtr u{background:rgba(128,128,128,.35)}
+.cvd .sd .dtr u.on{background:var(--sdh,var(--sbt))}
+.cvd .sd .bar2 b{background:var(--sdh,var(--sbt))}
+.cvd .pln{margin:3px 0;font-size:13px}
+.cvd .pln small{color:var(--mu)}
+.cvd .ab{overflow-wrap:anywhere}
+.cvd .e{overflow-wrap:anywhere}
+.L-banner .bn .ph{border-color:rgba(255,255,255,.9)}
+.cvd.dense{font-size:13px}.cvd.dense .nm{font-size:30px}
+.topr .btn{min-width:44px;min-height:44px}
+.langsel select{min-height:44px!important}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="wrap">
+  <header class="top">
+    <div class="brandwrap"><img id="brand-logo" class="blogo" alt="" hidden><div class="brand"><span class="bt">CV and Portfolio Builder</span></div></div>
+    <div class="topr">
+      <button type="button" class="btn light" id="home-btn" aria-label="Home" hidden><span data-ic="home" data-s="18"></span><span>Home</span></button>
+      <label class="langsel"><span data-ic="globe" data-s="20" aria-hidden="true"></span><select id="lang" aria-label="Language"><option value="en" translate="no">English</option><option value="fa" translate="no">&#1583;&#1585;&#1740;</option><option value="ps" translate="no">&#1662;&#1690;&#1578;&#1608;</option></select></label>
+    </div>
+    <div class="tabs" role="tablist"><button role="tab" id="t-edit" aria-selected="true">Edit</button><button role="tab" id="t-view" aria-selected="false">Preview</button></div>
+  </header>
+  <div class="notice" id="notice" role="alert" hidden></div>
+  <main id="main">
+
+  <div id="home" class="screen">
+    <section class="hero-home"><h1>CV and Portfolio Builder</h1><p class="lead">Create a professional CV or showcase your skills, projects and achievements in a personalized portfolio.</p></section>
+    <div class="cards2">
+      <article class="hcard" id="card-cv"><div class="hart" id="art-cv"></div><span class="kicker">CV Builder</span><h2><button type="button" id="go-cv">Create Your CV</button></h2><p class="d">Choose a professional template, add your information and download a polished CV for scholarships, education and job applications.</p><span id="cv-badge"></span></article>
+      <article class="hcard" id="card-pf"><div class="hart" id="art-pf"></div><span class="kicker">Showcase</span><h2><button type="button" id="go-pf">Create Your Portfolio</button></h2><p class="d">Showcase your field of study, skills, projects, creative work and achievements in a personalized portfolio.</p><span id="pf-badge"></span></article>
+    </div>
+  </div>
+
+  <div id="edit" class="screen" hidden>
+    <h1 class="ptitle">Create Your Portfolio</h1>
+    <div class="progress"><span class="mute" id="ptext">Portfolio completion: 0%</span><div class="bar" id="pbarw" role="progressbar" aria-labelledby="ptext" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="pbar"></i></div></div>
+
+    <section class="box" aria-labelledby="h-personal">
+      <h2 id="h-personal">Personal Information</h2>
+      <p class="mute">Share only what you are comfortable sharing. School, city, phone, email and photo are optional. Your information stays on this device until you choose to share it.</p>
+      <div class="up">
+        <div class="pv" id="pv-photo"></div>
+        <div>
+          <button type="button" class="btn" id="up"><span data-ic="camera" data-s="16"></span>Upload photo</button>
+          <input type="file" accept="image/png,image/jpeg,image/webp" id="in-photo" class="vh" tabindex="-1" aria-label="Upload photo">
+          <div><button type="button" class="del" id="rm-photo"><span data-ic="trash" data-s="16"></span>Remove photo</button></div>
+        </div>
+      </div>
+      <div class="grid">
+        <label>Full name<input id="name" autocomplete="name"></label>
+        <label><span class="lb"><span data-ic="hash" data-s="18"></span>Student ID</span><input id="code" inputmode="numeric"></label>
+        <label><span class="lb"><span data-ic="cap" data-s="18"></span>Class</span><input id="grade" placeholder="e.g. Class 11"></label>
+        <label><span class="lb"><span data-ic="school" data-s="18"></span>School (optional)</span><input id="school"></label>
+        <label><span class="lb"><span data-ic="pin" data-s="18"></span>City or province (optional)</span><input id="city"></label>
+        <label class="full"><span class="lb"><span data-ic="id" data-s="18"></span>ID Document Link</span><input id="idlink" placeholder="Link to your Tazkira, passport or ID card"></label>
+        <label class="full"><span class="lb"><span data-ic="user" data-s="18"></span>About Me</span><textarea id="bio" placeholder="Introduce yourself and your goals in two or three sentences"></textarea></label>
+      </div>
+    </section>
+
+    <section class="box" aria-labelledby="h-contact">
+      <h2 id="h-contact">Contact Information</h2>
+      <div class="grid">
+        <label><span class="lb"><span data-ic="phone" data-s="18"></span>Phone Number (optional)</span><input id="phone" type="tel"></label>
+        <label><span class="lb"><span data-ic="mail" data-s="18"></span>Email Address (optional)</span><input id="email" type="email"></label>
+        <label><span class="lb"><span data-ic="linkedin" data-s="18"></span>LinkedIn</span><input id="linkedin" placeholder="linkedin.com/in/yourname"></label>
+        <label><span class="lb"><span data-ic="github" data-s="18"></span>GitHub</span><input id="github" placeholder="github.com/yourname"></label>
+        <label class="full"><span class="lb"><span data-ic="link" data-s="18"></span>Portfolio Website or Other Link</span><input id="site" placeholder="https://"></label>
+      </div>
+    </section>
+
+    <section class="box" aria-labelledby="h-fields">
+      <h2 id="h-fields">Fields</h2>
+      <p class="mute">Select one or more Fields of Study, or add your own. Each field opens as its own section with optional text, link and image content.</p>
+      <div class="chips" id="cat-chips" role="group" aria-label="Fields of Study"></div>
+      <div class="addf"><label>Add Your Own Field of Study<input id="uf-name" placeholder="e.g. Chemistry, Architecture, Chess" aria-describedby="uf-err"></label><button type="button" class="btn" id="uf-add"><span data-ic="plus" data-s="16"></span>Add Field</button></div>
+      <span class="err" id="uf-err" role="alert" hidden></span>
+    </section>
+    <div id="cat-secs" class="acc" role="group" aria-label="Selected Fields of Study"></div>
+
+    <section class="box" aria-labelledby="h-ach">
+      <h2 id="h-ach">Achievements</h2>
+      <p class="mute">Add as many achievements, courses or activities as you need. You can edit or remove any of them.</p>
+      <div class="grid">
+        <label>Title<input id="ac-title" placeholder="e.g. Olympiad medal, course certificate" aria-describedby="ac-err"></label>
+        <label>Type<select id="ac-type"><option value="Achievement">Achievement</option><option value="Course">Course</option><option value="Competition">Competition</option><option value="Volunteering">Volunteering</option><option value="Other">Other</option></select></label>
+        <label>Organizer<input id="ac-org"></label>
+        <label>Date or year<input id="ac-date"></label>
+        <label class="full"><span class="lb"><span data-ic="link" data-s="18"></span>Link to certificate or proof (optional)</span><input id="ac-link" placeholder="https://"></label>
+      </div>
+      <span class="err" id="ac-err" role="alert" hidden></span>
+      <div class="acts"><button type="button" class="btn" id="ac-add">Add achievement</button><button type="button" class="btn ghost" id="ac-cancel" hidden>Cancel edit</button></div>
+      <div id="ac-list"></div>
+    </section>
+
+    <div class="previewbar noprint"><button type="button" class="btn big" id="go-preview"><span data-ic="eye" data-s="20"></span>Preview your portfolio</button><p class="mute">Check your completed portfolio before saving it as a PDF.</p></div>
+    <p class="mute">Your information is saved only in this browser.</p>
+    <p><button type="button" class="btn ghost" id="reset"><span data-ic="trash" data-s="16"></span>Clear all information</button></p>
+  </div>
+
+  <div id="view" class="screen" hidden>
+    <p class="noprint"><button type="button" class="btn ghost" id="back-edit"><span data-ic="back" data-s="16"></span>Back to editing</button></p>
+    <h1 class="ptitle noprint">Preview your portfolio</h1>
+    <div class="cv" id="cv"></div>
+    <div class="rev noprint" id="rev"></div>
+    <label class="chk noprint"><input type="checkbox" id="reviewed"><span>I have reviewed all my information and it is correct.</span></label>
+    <div class="noprint acts">
+      <button type="button" class="btn" id="pdf"><span data-ic="download" data-s="18"></span>Download PDF</button>
+      <button type="button" class="btn ghost" id="print"><span data-ic="print" data-s="16"></span>Print</button>
+    </div>
+    <p class="mute noprint" id="pdf-note">Download PDF creates the document on your device without internet. In a web browser, use the displayed Save as PDF option.</p>
+    <section class="box noprint" aria-labelledby="h-share">
+      <h2 id="h-share">Share With Us</h2>
+      <p>Share your completed portfolio with us.</p>
+      <button type="button" class="btn big" id="share-btn"><span data-ic="share" data-s="20"></span>Share With Us</button>
+    </section>
+    <p class="noprint"><button type="button" class="btn ghost" id="clear2"><span data-ic="trash" data-s="16"></span>Clear my data from this device</button></p>
+  </div>
+
+  <div id="cv-tpl" class="screen" hidden></div>
+  <div id="cv-edit" class="screen" hidden></div>
+  <div id="cv-view" class="screen" hidden>
+    <div class="noprint acts"><button type="button" class="btn ghost" id="cv-back"><span data-ic="back" data-s="16"></span>Back to editing</button><button type="button" class="btn ghost" id="cv-chg2">Change template</button></div>
+    <h1 class="ptitle noprint">Preview your CV</h1>
+    <div class="fit" id="cv-fit"><div class="cvsheet" id="cvx"></div></div>
+    <div class="noprint acts"><button type="button" class="btn" id="cv-pdf"><span data-ic="download" data-s="18"></span>Download PDF</button><button type="button" class="btn ghost" id="cv-print"><span data-ic="print" data-s="16"></span>Print</button></div>
+    <p class="mute noprint">Download PDF creates the document on your device without internet. In a web browser, use the displayed Save as PDF option.</p>
+  </div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="toast err" id="toast-err" role="alert"></div>
+
+<script>
+(function(){
+var KEY="eba-portfolio-v1";
+var D={p:{},skills:[],projects:[],ach:[]};
+try{var s=localStorage.getItem(KEY);if(s){var o=JSON.parse(s);if(o&&o.p)D=o}}catch(e){}
+D.cats=D.cats||[];D.cd=D.cd||{};D.ce=D.ce||{};D.mp=D.mp||[];while(D.mp.length<5)D.mp.push({});D.ap=D.ap||[];while(D.ap.length<5)D.ap.push({});D.cf=D.cf||[];D.blocks=D.blocks||{};
+var LVL=["Beginner","Intermediate","Advanced","Professional"],YRS=["Years of experience"];
+var CATS={
+music:{n:"Music",d:[["Main instrument or voice"],["Genre or style"],YRS,["Level",LVL],["Teacher or music school"],["Reads sheet music",["Yes","A little","No"]]],en:"Repertoire and performances",e:[["Piece or title"],["Composer or artist"],["Type",["Performance","Recording","Composition","Exam"]],["Venue or link"],["Date"]]},
+art:{n:"Painting and Art",d:[["Main medium (e.g. oil, watercolor, digital)"],["Style"],YRS,["Level",LVL],["Teacher or studio"],["Tools or software"]],en:"Artworks",e:[["Title"],["Technique or materials"],["Type",["Painting","Drawing","Digital art","Sculpture","Calligraphy","Other"]],["Size"],["Exhibition or link"],["Year"]]},
+sport:{n:"Sports",d:[["Main sport"],["Position or event"],["Team or club"],YRS,["Level",["Recreational","School","Club","Provincial","National","International"]],["Coach"]],en:"Competitions and results",e:[["Competition or event"],["Result or ranking"],["Type",["Tournament","Match","Race","Training camp","Record"]],["Organizer"],["Date"]]},
+photo:{n:"Photography and Film",d:[["Main focus (e.g. portrait, nature, documentary)"],["Equipment"],["Editing software"],YRS,["Level",LVL],["Mentor or club"]],en:"Works",e:[["Title"],["Type",["Photo series","Short film","Video","Edit"]],["Where shown, or link"],["Year"]]},
+write:{n:"Writing and Literature",d:[["Main genres"],["Languages"],YRS,["Level",LVL],["Mentor or club"]],en:"Written and published works",e:[["Title"],["Type",["Story","Poem","Essay","Article","Book","Speech"]],["Where published, or link"],["Date"]]},
+tech:{n:"Technology and Science",d:[["Main languages or tools"],["Areas of interest"],YRS,["Level",LVL],["Mentor or club"]],en:"Projects and competitions",e:[["Title"],["Type",["App","Website","Robot","Research","Competition"]],["Tools"],["Link"],["Date"]]},
+other:{n:"Other",d:[["Your field"],YRS,["Level",LVL],["Mentor or club"]],en:"Works and activities",e:[["Title"],["Type"],["Link"],["Date"]]}
+};
+var CATBASE=JSON.parse(JSON.stringify(CATS));
+function syncUF(){Object.keys(CATS).forEach(function(k){if(k.indexOf("u_")===0)delete CATS[k]});D.cf.forEach(function(f){CATS[f.id]={n:f.name,d:[],en:"",e:[],user:1}})}
+syncUF();
+/* Fields of study and home cards are loaded from the bundled config.json. */
+var HID={};
+var $=function(id){return document.getElementById(id)};
+/* ===== localization (English default, Dari and Pashto). All translations live in TR. ===== */
+var LANGS={en:{n:"English",dir:"ltr",loc:"en-GB"},fa:{n:"\u062f\u0631\u06cc",dir:"rtl",loc:"fa-AF-u-ca-gregory-nu-latn"},ps:{n:"\u067e\u069a\u062a\u0648",dir:"rtl",loc:"ps-AF-u-ca-gregory-nu-latn"}},LANG="en";
+var TR=/*TR_DATA*/{"fa":{"(optional)":"(اختیاری)",". Do not use “Anyone with the link”.":". از گزینه‌ی «هر کسی که لینک را دارد» استفاده نکنید.","{n} of 5 required projects complete. All five are needed before you can create, print or send your PDF.":"{n} از ۵ پروژه‌ی ضروری تکمیل شده است. پیش از ساختن، چاپ یا ارسال PDF هر پنج پروژه لازم است.","{n} of 5 required projects complete.":"{n} از ۵ پروژه‌ی ضروری تکمیل شده است.","{n}. Untitled":"{n}. بدون عنوان","A little":"کمی","About Me":"درباره‌ی من","About me":"درباره‌ی من","Academic Templates":"قالب‌های آکادمیک","Achievement":"دستاورد","Achievements":"دستاوردها","Add":"افزودن","Add Field":"افزودن رشته","Add Image":"افزودن تصویر","Add Link":"افزودن لینک","Add Text":"افزودن متن","Add Your Own Field of Study":"رشته‌ی تحصیلی خودتان را اضافه کنید","Add a field of study for all students":"افزودن رشته‌ی تحصیلی برای همه‌ی شاگردان","Add achievement":"افزودن دستاورد","Add any mix of text, links and images to this field.":"هر ترکیبی از متن، لینک و تصویر را به این رشته اضافه کنید.","Add as many achievements, courses or activities as you need. You can edit or remove any of them.":"به هر تعداد که لازم دارید دستاورد، دوره یا فعالیت اضافه کنید. می‌توانید هرکدام را ویرایش یا حذف کنید.","Add field of study":"افزودن رشته‌ی تحصیلی","Add more content":"افزودن محتوای بیشتر","Add up to 5 projects. For each one, add a square cover image, a link to your own performance or recording, and a link to the original song. Set Google Drive links to “Anyone with the link can view” so the examiner can watch and give a score.":"تا ۵ پروژه اضافه کنید. برای هر پروژه یک تصویر مربعی جلد، لینک اجرا یا ضبط خودتان و لینک آهنگ اصلی را بگذارید. لینک‌های گوگل درایو را روی «هر کسی که لینک را دارد می‌تواند ببیند» تنظیم کنید تا ممتحن بتواند ببیند و نمره بدهد.","Added":"اضافه شد","Admin":"مدیر","Admin account":"حساب مدیر","Admin login":"ورود مدیر","Admin login created. Download config.json and upload it to apply this for everyone.":"ورود مدیر ساخته شد. config.json را دانلود و بارگذاری کنید تا برای همه اعمال شود.","Admin login needs a secure (HTTPS) page.":"ورود مدیر به صفحه‌ی امن (HTTPS) نیاز دارد.","All five projects are required. Projects 1 to 3 are video projects: add a link to each video. Projects 4 and 5 are image projects: add a link to the original painting image. Set links to “Anyone with the link can view” so the examiner can open them.":"هر پنج پروژه ضروری است. پروژه‌های ۱ تا ۳ ویدیویی‌اند: لینک هر ویدیو را بگذارید. پروژه‌های ۴ و ۵ تصویری‌اند: لینک تصویر اصلی نقاشی را بگذارید. لینک‌ها را روی «هر کسی که لینک را دارد می‌تواند ببیند» تنظیم کنید تا ممتحن بتواند آن‌ها را باز کند.","App":"اپلیکیشن","Areas of interest":"حوزه‌های علاقه","Art and Projects":"هنر و پروژه‌ها","Article":"مقاله","At least one portfolio area selected":"دست‌کم یک رشته برای پورتفولیو انتخاب شده است","Back to editing":"بازگشت به ویرایش","Basic":"مقدماتی","Beginner":"مبتدی","Best for Creative Fields":"مناسب برای رشته‌های خلاق","Best for Internships":"مناسب برای کارآموزی","Best for Long CVs":"مناسب برای رزومه‌های طولانی","Best for Scholarships":"مناسب برای بورسیه","Best for Students":"مناسب برای شاگردان","Bold sidebar with photo, contacts and skills.":"ستون کناری پررنگ با عکس، تماس و مهارت‌ها.","Book":"کتاب","Built-in illustration in use.":"تصویر پیش‌فرض برنامه استفاده می‌شود.","CV Builder":"سازنده‌ی رزومه","CV cleared":"رزومه پاک شد","Calm green with a sidebar on the right.":"سبز آرام با ستون کناری در سمت راست.","Cancel":"لغو","Cancel edit":"لغو ویرایش","Caption (optional)":"توضیح تصویر (اختیاری)","Certificate":"گواهی‌نامه","Certificates":"گواهی‌نامه‌ها","Change template":"تغییر قالب","Check the preview above carefully. Go back to Edit to fix anything.":"پیش‌نمایش بالا را با دقت بررسی کنید. برای اصلاح هر چیز به ویرایش برگردید.","Check your CV before saving it as a PDF.":"پیش از ذخیره به‌صورت PDF رزومه‌ی خود را بررسی کنید.","Check your completed portfolio before saving it as a PDF.":"پیش از ذخیره به‌صورت PDF پورتفولیوی تکمیل‌شده‌ی خود را بررسی کنید.","Choose a configuration file":"یک فایل تنظیمات انتخاب کنید","Choose a logo image":"تصویر لوگو را انتخاب کنید","Choose a professional template, add your information and download a polished CV for scholarships, education and job applications.":"یک قالب حرفه‌ای انتخاب کنید، معلومات خود را اضافه کنید و رزومه‌ی آراسته‌ای برای بورسیه، تحصیل و درخواست کار دانلود کنید.","Choose an image":"یک تصویر انتخاب کنید","Choose how to send it":"نحوه‌ی ارسال را انتخاب کنید","Choose your CV template":"قالب رزومه‌ی خود را انتخاب کنید","City and country":"شهر و کشور","City or country":"شهر یا کشور","City or province (optional)":"شهر یا ولایت (اختیاری)","Class":"صنف","Classic Academic":"آکادمیک کلاسیک","Clean cards in cool tones.":"کارت‌های تمیز با رنگ‌های سرد.","Clear all":"پاک کردن همه","Clear all information":"پاک کردن همه‌ی معلومات","Clear all portfolio information on this device? This cannot be undone.":"همه‌ی معلومات پورتفولیو در این دستگاه پاک شود؟ این کار قابل بازگشت نیست.","Clear my CV":"پاک کردن رزومه‌ی من","Clear my data from this device":"پاک کردن معلومات من از این دستگاه","Clear your whole CV on this device? This cannot be undone.":"همه‌ی رزومه در این دستگاه پاک شود؟ این کار قابل بازگشت نیست.","Cleared":"پاک شد","Close":"بستن","Club":"باشگاه","Coach":"مربی","Colourful banner with rounded headings.":"بنر رنگارنگ با عنوان‌های گرد.","Colourful layouts for art, design and creative fields.":"چیدمان‌های رنگارنگ برای هنر، طراحی و رشته‌های خلاق.","Compact Two-Column":"دو ستونه فشرده","Competition":"مسابقه","Competition or event":"مسابقه یا رویداد","Competitions and results":"مسابقه‌ها و نتایج","Confirm new password":"تأیید رمز عبور جدید","Confirm password":"تأیید رمز عبور","Contact Information":"معلومات تماس","Conversational":"محاوره‌ای","Copy Message Text":"کپی متن پیام","Copy config":"کپی تنظیمات","Could not open the print window.":"پنجره‌ی چاپ باز نشد.","Could not read this file.":"این فایل خوانده نشد.","Could not save the configuration: the browser storage is full or blocked. Remove an image and try again.":"تنظیمات ذخیره نشد: حافظه‌ی مرورگر پر یا مسدود است. یک تصویر را حذف کنید و دوباره تلاش کنید.","Could not save the file":"فایل ذخیره نشد","Could not save: the browser storage is full or blocked. Remove some images or free up space.":"ذخیره نشد: حافظه‌ی مرورگر پر یا مسدود است. چند تصویر را حذف کنید یا جا باز کنید.","Course":"دوره","Create Your CV":"رزومه‌ی خود را بسازید","Create Your CV card":"کارت «رزومه‌ی خود را بسازید»","Create Your Portfolio":"پورتفولیوی خود را بسازید","Create Your Portfolio card":"کارت «پورتفولیوی خود را بسازید»","Create a professional CV or showcase your skills, projects and achievements in a personalized portfolio.":"یک رزومه‌ی حرفه‌ای بسازید یا مهارت‌ها، پروژه‌ها و دستاوردهای خود را در یک پورتفولیوی شخصی نمایش دهید.","Create a username and password for this tool. Use at least 10 characters for the password. There is no password recovery. To reset it, remove the admin entry from config.json on your hosting.":"برای این ابزار یک نام کاربری و رمز عبور بسازید. رمز عبور باید دست‌کم ۱۰ حرف باشد. بازیابی رمز وجود ندارد. برای بازنشانی، بخش admin را از config.json در میزبانی‌تان حذف کنید.","Create admin login":"ساخت ورود مدیر","Creative Templates":"قالب‌های خلاق","Creative Violet":"بنفش خلاق","Current password":"رمز عبور فعلی","Dari":"دری","Dark banner with a serious, focused look.":"بنر تیره با ظاهر جدی و متمرکز.","Dark sidebar with strong contrast.":"ستون کناری تیره با تضاد قوی.","Date":"تاریخ","Date or year":"تاریخ یا سال","Degree or program":"مدرک یا برنامه","Describe what you did and the difference it made.":"بنویسید چه کردید و چه تفاوتی ایجاد کرد.","Description":"توضیحات","Description (optional)":"توضیحات (اختیاری)","Details (optional)":"جزئیات (اختیاری)","Details copied from your portfolio":"معلومات از پورتفولیوی شما کپی شد","Discard":"صرف‌نظر","Discard draft":"دور انداختن پیش‌نویس","Discard your draft changes on this device?":"تغییرات پیش‌نویس شما در این دستگاه دور انداخته شود؟","Download PDF":"دانلود PDF","Download PDF opens your browser’s print window. Choose “Save as PDF” there. The PDF keeps selectable text and clickable links, and works without internet.":"دانلود PDF پنجره‌ی چاپ مرورگر را باز می‌کند. در آنجا «ذخیره به‌صورت PDF» را انتخاب کنید. متن PDF قابل انتخاب و لینک‌ها قابل کلیک می‌ماند و بدون انترنت هم کار می‌کند.","Download backup":"دانلود نسخه‌ی پشتیبان","Download config.json":"دانلود config.json","Download your PDF first, or tick that you already have it.":"ابتدا PDF خود را دانلود کنید یا تیک بزنید که آن را دارید.","Edit":"ویرایش","Editing software":"نرم‌افزار ویرایش","Education":"تحصیلات","Elegant Rose":"گل‌سرخی ظریف","Email Address (optional)":"آدرس ایمیل (اختیاری)","Email address":"آدرس ایمیل","Email or phone":"ایمیل یا تلفن","Email that receives portfolios":"ایمیلی که پورتفولیوها را دریافت می‌کند","Employer or organization":"کارفرما یا سازمان","End":"پایان","End (or Present)":"پایان (یا اکنون)","End year (or expected)":"سال پایان (یا مورد انتظار)","English":"English","Equipment":"تجهیزات","Essay":"مضمون","Executive Slate":"خاکستری اجرایی","Expert":"متخصص","Explain what you built or created, your role and the result.":"بنویسید چه ساختید یا خلق کردید، نقش شما چه بود و نتیجه چه شد.","Field added":"رشته اضافه شد","Field of Study":"رشته‌ی تحصیلی","Fields":"رشته‌ها","Fields for each work (separate with commas; the first is the title)":"فیلدهای هر اثر (با کاما جدا کنید؛ اولی عنوان است)","Fields of Study":"رشته‌های تحصیلی","Fill from my portfolio details":"پر کردن از معلومات پورتفولیوی من","Fits a lot of information neatly.":"اطلاعات زیاد را مرتب جا می‌دهد.","Fluent":"مسلط","Focus on achievements and results, not only responsibilities.":"روی دستاوردها و نتایج تمرکز کنید، نه فقط وظایف.","Fresh Green":"سبز تازه","Full name":"نام کامل","Genre or style":"ژانر یا سبک","GitHub":"GitHub","GitHub:":"GitHub:","Gmail opened. Attach your downloaded PDF before sending.":"Gmail باز شد. پیش از ارسال PDF دانلودشده را ضمیمه کنید.","High School Student and Scholarship Applicant":"شاگرد مکتب و متقاضی بورسیه","Home":"خانه","I already have my PDF file.":"فایل PDF خود را دارم.","I have reviewed all my information and it is correct.":"همه‌ی معلومات خود را بررسی کرده‌ام و درست است.","ID Document Link":"لینک سند هویت","Illustration of a CV page":"تصویر یک صفحه‌ی رزومه","Illustration of a portfolio gallery":"تصویر یک گالری پورتفولیو","Image":"تصویر","Image added":"تصویر اضافه شد","Image projects":"پروژه‌های تصویری","In Progress":"در حال انجام","In the print window, choose Save as PDF.":"در پنجره‌ی چاپ «ذخیره به‌صورت PDF» را انتخاب کنید.","Include":"شامل شود","Include the result, rank or recognition you received.":"نتیجه، رتبه یا تقدیری که دریافت کردید را بنویسید.","Incorrect username or password.":"نام کاربری یا رمز عبور درست نیست.","Intermediate":"متوسط","International":"بین‌المللی","Introduce yourself and your goals in two or three sentences":"خود و اهدافتان را در دو یا سه جمله معرفی کنید","Issued by":"صادرکننده","Job title":"عنوان وظیفه","Language":"زبان","Languages":"زبان‌ها","Level":"سطح","Link":"لینک","Link (optional)":"لینک (اختیاری)","Link address":"آدرس لینک","Link title":"عنوان لینک","Link to certificate or proof (optional)":"لینک گواهی یا سند (اختیاری)","Link to the original painting image":"لینک تصویر اصلی نقاشی","Link to your Tazkira, passport or ID card":"لینک تذکره، پاسپورت یا کارت هویت شما","LinkedIn":"LinkedIn","LinkedIn:":"LinkedIn:","Load config":"بارگذاری تنظیمات","Local Configuration Tool":"ابزار تنظیمات محلی","Log out":"خروج","Logo (optional)":"لوگو (اختیاری)","Main focus (e.g. portrait, nature, documentary)":"تمرکز اصلی (مثلاً پرتره، طبیعت، مستند)","Main genres":"ژانرهای اصلی","Main instrument or voice":"ساز یا صدای اصلی","Main languages or tools":"زبان‌ها یا ابزارهای اصلی","Main medium (e.g. oil, watercolor, digital)":"ماده‌ی اصلی (مثلاً رنگ روغن، آبرنگ، دیجیتال)","Main sport":"ورزش اصلی","Match":"مسابقه‌ی تیمی","Mention your education, your strengths and what you want to achieve.":"از تحصیلات، نقاط قوت و آنچه می‌خواهید به دست آورید بنویسید.","Mentor or club":"استاد راهنما یا باشگاه","Midnight":"نیمه‌شب","Minimal and elegant with centered headings.":"ساده و ظریف با عنوان‌های وسط‌چین.","Modern Blue":"آبی مدرن","Move Down":"انتقال به پایین","Move Down: {n}":"انتقال به پایین: {n}","Move Up":"انتقال به بالا","Move Up: {n}":"انتقال به بالا: {n}","Move section down":"انتقال بخش به پایین","Move section down: {n}":"انتقال بخش به پایین: {n}","Move section up":"انتقال بخش به بالا","Move section up: {n}":"انتقال بخش به بالا: {n}","Music":"موسیقی","Music projects (up to 5)":"پروژه‌های موسیقی (تا ۵)","Name":"نام","National":"ملی","Native":"زبان مادری","New password (leave empty to keep the current one)":"رمز عبور جدید (برای حفظ رمز فعلی خالی بگذارید)","No":"نه","No achievements yet. Add your first one above.":"هنوز دستاوردی ثبت نشده است. اولین دستاورد خود را در بالا اضافه کنید.","No extra content yet. Use the buttons above if you want to add some.":"هنوز محتوای اضافی نیست. اگر می‌خواهید، از دکمه‌های بالا استفاده کنید.","No image yet":"هنوز تصویری نیست","No logo added.":"لوگویی اضافه نشده است.","No photo":"بدون عکس","Not Started":"شروع نشده","Not provided":"ارائه نشده","Nothing added yet.":"هنوز چیزی اضافه نشده است.","Nothing added yet. This section is optional.":"هنوز چیزی اضافه نشده است. این بخش اختیاری است.","Ocean Cards":"کارت‌های اقیانوس","Or paste a configuration (JSON)":"یا یک تنظیمات (JSON) را بچسبانید","Organization":"سازمان","Organizer":"برگزارکننده","Original Song Link":"لینک آهنگ اصلی","Original painting":"نقاشی اصلی","Other":"سایر","PDF export is not available in this browser. Please open Pathfolio in Chrome, Edge, Firefox or Safari.":"ساخت PDF در این مرورگر ممکن نیست. لطفاً Pathfolio را در Chrome، Edge، Firefox یا Safari باز کنید.","PDF export is not available in this browser. You can still fill in and save everything. Open Pathfolio in Chrome, Edge, Firefox or Safari to create a PDF.":"ساخت PDF در این مرورگر ممکن نیست. هنوز می‌توانید همه‌چیز را پر و ذخیره کنید. برای ساخت PDF، Pathfolio را در Chrome، Edge، Firefox یا Safari باز کنید.","PDF step finished":"مرحله‌ی PDF تمام شد","Painting and Art":"نقاشی و هنر","Pashto":"پشتو","Password":"رمز عبور","Pathfolio · Prepared on {d}":"Pathfolio · تهیه‌شده در {d}","Personal Information":"معلومات شخصی","Phone Number (optional)":"شماره‌ی تماس (اختیاری)","Phone number":"شماره‌ی تماس","Photo added":"عکس اضافه شد","Photo series":"مجموعه‌ی عکس","Photography and Film":"عکاسی و فیلم","Pick the look you like. You can change it at any time and everything you typed stays exactly as it is.":"ظاهر دلخواه خود را انتخاب کنید. هر زمان می‌توانید آن را تغییر دهید و هرچه نوشته‌اید همان‌طور می‌ماند.","The previews show sample content until you add your own.":"پیش‌نمایش‌ها تا زمانی که معلومات خودتان را اضافه کنید، محتوای نمونه را نشان می‌دهند.","Please choose a PNG, JPEG or WebP image smaller than 8 MB.":"لطفاً تصویر PNG، JPEG یا WebP کوچک‌تر از ۸ مگابایت انتخاب کنید.","Please choose a PNG, JPEG or WebP image.":"لطفاً یک تصویر PNG، JPEG یا WebP انتخاب کنید.","Please complete: {x}":"لطفاً تکمیل کنید: {x}","Please confirm":"لطفاً تأیید کنید","Please enter a name":"لطفاً یک نام وارد کنید","Please enter your full name first":"لطفاً ابتدا نام کامل خود را وارد کنید","Please fill in the first field":"لطفاً فیلد اول را پر کنید","Please fill in the title first":"لطفاً ابتدا عنوان را پر کنید","Please read:":"لطفاً بخوانید:","Please tick the consent box to continue.":"برای ادامه، لطفاً کادر رضایت را تیک بزنید.","Please tick: I have reviewed all my information":"لطفاً تیک بزنید: همه‌ی معلومات خود را بررسی کرده‌ام","Please type a name for the field":"لطفاً برای رشته یک نام بنویسید","Poem":"شعر","Portfolio Website or Other Link":"وب‌سایت پورتفولیو یا لینک دیگر","Portfolio completion: {n}%":"تکمیل پورتفولیو: {n}٪","Position and organization":"وظیفه و سازمان","Position or event":"موقعیت یا ماده","Prepared on {d}":"تهیه‌شده در {d}","Preview":"پیش‌نمایش","Preview image":"تصویر پیش‌نمایش","Preview your CV":"پیش‌نمایش رزومه‌ی شما","Preview your portfolio":"پیش‌نمایش پورتفولیوی شما","Preview: {n}":"پیش‌نمایش: {n}","Print":"چاپ","Professional":"حرفه‌ای","Professional Summary":"خلاصه‌ی حرفه‌ای","Professional Templates":"قالب‌های حرفه‌ای","Professional Title":"عنوان حرفه‌ای","Project":"پروژه","Project {n}":"پروژه‌ی {n}","Project or Song Title":"عنوان پروژه یا آهنگ","Project title":"عنوان پروژه","Projects":"پروژه‌ها","Projects and competitions":"پروژه‌ها و مسابقه‌ها","Provincial":"ولایتی","Publish, backup and restore":"انتشار، پشتیبان‌گیری و بازیابی","Questions about the student (separate with commas)":"پرسش‌ها درباره‌ی شاگرد (با کاما جدا کنید)","Race":"دوش","Reads sheet music":"نت‌خوانی","Recipient email":"ایمیل گیرنده","Recommended: {x}":"توصیه می‌شود: {x}","Record":"رکورد","Recreational":"تفریحی","References":"مراجع","References (optional)":"مراجع (اختیاری)","References available upon request":"مراجع در صورت درخواست ارائه می‌شود","Remove":"حذف","Remove field":"حذف رشته","Remove photo":"حذف عکس","Remove this achievement?":"این دستاورد حذف شود؟","Remove this content item?":"این محتوا حذف شود؟","Remove this entry?":"این مورد حذف شود؟","Remove this field and all of its content?":"این رشته و همه‌ی محتوای آن حذف شود؟","Remove this item from your CV?":"این مورد از رزومه‌ی شما حذف شود؟","Replace":"جایگزین کردن","Replace your current draft with this configuration?":"پیش‌نویس فعلی شما با این تنظیمات جایگزین شود؟","Required: {x}":"ضروری: {x}","Research":"تحقیق","Responsibilities and results":"وظایف و نتایج","Restore Default Image":"بازگرداندن تصویر پیش‌فرض","Restore from file":"بازیابی از فایل","Result or ranking":"نتیجه یا رتبه","Review your data":"معلومات خود را بررسی کنید","Robot":"ربات","Role":"نقش","Save account changes":"ذخیره‌ی تغییرات حساب","Save changes":"ذخیره‌ی تغییرات","Saved {x}":"{x} ذخیره شد","Saved. Download config.json and upload it so students’ devices use the new login.":"ذخیره شد. config.json را دانلود و بارگذاری کنید تا دستگاه‌های شاگردان از ورود جدید استفاده کنند.","Scholar":"محقق","School":"مکتب","School (optional)":"مکتب (اختیاری)","School or university":"مکتب یا پوهنتون","Select one or more Fields of Study, or add your own. Each field opens as its own section with optional text, link and image content.":"یک یا چند رشته‌ی تحصیلی انتخاب کنید یا رشته‌ی خودتان را اضافه کنید. هر رشته به‌صورت بخش جداگانه با متن، لینک و تصویر اختیاری باز می‌شود.","Select...":"انتخاب کنید...","Selected":"انتخاب‌شده","Selected Fields of Study":"رشته‌های تحصیلی انتخاب‌شده","Share With Us":"با ما شریک کنید","Share only what you are comfortable sharing. School, city, phone, email and photo are optional. Your information stays on this device until you choose to share it.":"فقط چیزی را شریک کنید که راحت هستید. مکتب، شهر، تلفن، ایمیل و عکس اختیاری است. معلومات شما تا زمانی که خودتان شریک نکنید در همین دستگاه می‌ماند.","Share via Email App":"اشتراک از راه برنامه‌ی ایمیل","Share via Gmail":"اشتراک از راه Gmail","Share Using Device":"اشتراک با دستگاه","Sharing is not available here. Use Gmail, the email app or copy the address.":"اشتراک در اینجا ممکن نیست. از Gmail، برنامه‌ی ایمیل یا کپی آدرس استفاده کنید.","Sharing options":"گزینه‌های اشتراک","Short film":"فیلم کوتاه","Show password":"نمایش رمز عبور","Hide password":"پنهان کردن رمز عبور","Showcase":"نمایش آثار","Showcase your field of study, skills, projects, creative work and achievements in a personalized portfolio.":"رشته‌ی تحصیلی، مهارت‌ها، پروژه‌ها، آثار خلاق و دستاوردهای خود را در یک پورتفولیوی شخصی نمایش دهید.","Shows your journey step by step.":"مسیر شما را گام به گام نشان می‌دهد.","Skill":"مهارت","Skills":"مهارت‌ها","Skip to main content":"رفتن به محتوای اصلی","Soft and refined with a light sidebar.":"نرم و ظریف با ستون کناری روشن.","Speech":"سخنرانی","Sports":"ورزش","Start":"آغاز","Start year":"سال آغاز","Story":"داستان","Structured layouts for internships and first jobs.":"چیدمان‌های منظم برای کارآموزی و نخستین شغل.","Student Details":"جزئیات شاگرد","Student ID":"کد شاگرد","Student’s Performance/Recording Link":"لینک اجرا یا ضبط شاگرد","Student’s performance":"اجرای شاگرد","Style":"سبک","Sunrise":"طلوع","Teacher or music school":"استاد یا آموزشگاه موسیقی","Teacher or studio":"استاد یا آتلیه","Team or club":"تیم یا باشگاه","Technology and Science":"تکنالوژی و علوم","Template: {n}":"قالب: {n}","Text":"متن","The backup contains all settings, card images, the logo and the admin login record. Keep it somewhere safe.":"نسخه‌ی پشتیبان شامل همه‌ی تنظیمات، تصویر کارت‌ها، لوگو و اطلاعات ورود مدیر است. آن را در جای امن نگه دارید.","The current password is incorrect.":"رمز عبور فعلی درست نیست.","The logo appears in the header only when you add one. Upload it only if you have permission to use it.":"لوگو فقط زمانی در سربرگ نمایش داده می‌شود که آن را اضافه کنید. فقط در صورتی بارگذاری کنید که اجازه‌ی استفاده از آن را دارید.","The new password must have at least 10 characters.":"رمز عبور جدید باید دست‌کم ۱۰ حرف باشد.","The new passwords do not match.":"رمزهای عبور جدید یکسان نیستند.","The password must have at least 10 characters.":"رمز عبور باید دست‌کم ۱۰ حرف باشد.","The passwords do not match.":"رمزهای عبور یکسان نیستند.","This configuration is empty or not valid.":"این تنظیمات خالی یا نامعتبر است.","This file is not a supported image":"این فایل تصویر پشتیبانی‌شده نیست","This file is not a valid image.":"این فایل تصویر معتبر نیست.","This file is too large to be a configuration.":"این فایل برای تنظیمات بیش از حد بزرگ است.","This image is larger than 8 MB. Please choose a smaller one.":"این تصویر بزرگ‌تر از ۸ مگابایت است. لطفاً تصویر کوچک‌تری انتخاب کنید.","This image is too detailed to store. Please choose a simpler or smaller image.":"این تصویر برای ذخیره بسیار پرجزئیات است. لطفاً تصویر ساده‌تر یا کوچک‌تری انتخاب کنید.","This is not a valid Pathfolio configuration.":"این یک تنظیمات معتبر Pathfolio نیست.","This statement will appear in your CV. You do not need to enter anyone’s name or contact details.":"این جمله در رزومه‌ی شما می‌آید. لازم نیست نام یا معلومات تماس کسی را وارد کنید.","This tool only changes settings on this device. It is not a server login and cannot protect data on its own. Settings reach students only after you export config.json and upload it to your hosting.":"این ابزار فقط تنظیمات همین دستگاه را تغییر می‌دهد. ورود سرور نیست و به‌تنهایی نمی‌تواند از اطلاعات محافظت کند. تنظیمات فقط پس از خروجی گرفتن config.json و بارگذاری آن در میزبانی‌تان به شاگردان می‌رسد.","This tool runs only in your browser. It is not a server login and does not provide real security. Your changes are saved as a draft on this device. Students see them only after you download":"این ابزار فقط در مرورگر شما اجرا می‌شود. ورود سرور نیست و امنیت واقعی فراهم نمی‌کند. تغییرات شما به‌صورت پیش‌نویس در همین دستگاه ذخیره می‌شود. شاگردان فقط پس از آن می‌بینند که شما دانلود کنید","and upload it next to":"و آن را کنار","on your hosting. Whoever can edit your hosting files controls what is published.":"در میزبانی‌تان بارگذاری کنید. هرکسی که فایل‌های میزبانی شما را ویرایش کند، آنچه منتشر می‌شود را کنترل می‌کند.","Timeline":"خط زمانی","Title":"عنوان","Title (optional)":"عنوان (اختیاری)","Title of the works list":"عنوان فهرست آثار","Too many attempts. Try again in a minute.":"تلاش‌های ناموفق زیاد بود. یک دقیقه بعد دوباره امتحان کنید.","Tools":"ابزارها","Tools or software":"ابزارها یا نرم‌افزار","Tournament":"تورنمنت","Traditional and trusted. Navy and gold.":"سنتی و قابل اعتماد. سرمه‌ای و طلایی.","Traditional layouts for scholarships and school applications.":"چیدمان‌های سنتی برای بورسیه و درخواست‌های تحصیلی.","Training camp":"کمپ آموزشی","Type":"نوع","Updated":"به‌روز شد","Upload Image":"بارگذاری تصویر","Replace Image":"جایگزینی تصویر","Remove Image":"حذف تصویر","Upload Logo":"بارگذاری لوگو","Replace Logo":"جایگزینی لوگو","Remove Logo":"حذف لوگو","Upload cover image":"بارگذاری تصویر جلد","Upload image":"بارگذاری تصویر","Replace image":"جایگزینی تصویر","Upload photo":"بارگذاری عکس","Upload preview image (optional)":"بارگذاری تصویر پیش‌نمایش (اختیاری)","Upload the document to Google Drive and share it only with":"سند را به Google Drive بارگذاری کنید و فقط با","Use This Template":"استفاده از این قالب","Use This Template: {n}":"استفاده از این قالب: {n}","Use landscape images. They are cropped to a 16:9 shape (960 × 560) and compressed automatically. PNG, JPEG or WebP, up to 8 MB.":"از تصاویر افقی استفاده کنید. تصاویر به شکل ۱۶:۹ (۹۶۰ × ۵۶۰) بریده و خودکار فشرده می‌شوند. PNG، JPEG یا WebP تا ۸ مگابایت.","Username":"نام کاربری","Username: 3 to 40 letters, numbers or . _ @ -":"نام کاربری: ۳ تا ۴۰ حرف، عدد یا . _ @ -","Video":"ویدیو","Video link":"لینک ویدیو","Video projects":"پروژه‌های ویدیویی","Volunteer Experience":"تجربه‌ی داوطلبانه","Volunteering":"کار داوطلبانه","Warm colours and soft cards.":"رنگ‌های گرم و کارت‌های نرم.","Website":"وب‌سایت","Website or portfolio link":"وب‌سایت یا لینک پورتفولیو","Website:":"وب‌سایت:","Welcome card images":"تصاویر کارت‌های خوش‌آمد","Welcome to Pathfolio":"به Pathfolio خوش آمدید","What does this image show?":"این تصویر چه چیزی را نشان می‌دهد؟","What you did":"کاری که کردید","Where published, or link":"کجا منتشر شده، یا لینک","Where shown, or link":"کجا نمایش داده شده، یا لینک","Work Experience":"تجربه‌ی کاری","Works":"آثار","Works and activities":"آثار و فعالیت‌ها","Write two or three sentences about your education, strengths, interests and future goals.":"دو یا سه جمله درباره‌ی تحصیلات، نقاط قوت، علایق و اهداف آینده‌ی خود بنویسید.","Write your description or reflection here":"توضیح یا نظر خود را اینجا بنویسید","Writing and Literature":"نویسندگی و ادبیات","Written and published works":"آثار نوشته‌شده و منتشرشده","Year":"سال","Years of experience":"سال‌های تجربه","Yes":"بله","You are back online.":"دوباره آنلاین شدید.","You are offline. You can keep working. Everything is saved on this device.":"شما آفلاین هستید. می‌توانید به کار ادامه دهید. همه‌چیز در همین دستگاه ذخیره می‌شود.","You can add up to 12 fields":"می‌توانید تا ۱۲ رشته اضافه کنید","Your PDF is not attached automatically. After your email opens, attach the PDF you downloaded.":"PDF شما به‌صورت خودکار ضمیمه نمی‌شود. پس از باز شدن ایمیل، PDF دانلودشده را ضمیمه کنید.","Your details are placed in the chosen template automatically. Optional sections can be turned off or moved. Your CV is saved on this device.":"معلومات شما به‌صورت خودکار در قالب انتخاب‌شده قرار می‌گیرد. بخش‌های اختیاری را می‌توان خاموش یا جابه‌جا کرد. رزومه‌ی شما در همین دستگاه ذخیره می‌شود.","Your email app should open. Attach your downloaded PDF before sending.":"برنامه‌ی ایمیل شما باید باز شود. پیش از ارسال PDF دانلودشده را ضمیمه کنید.","Your field":"رشته‌ی شما","Your information is saved only in this browser.":"معلومات شما فقط در همین مرورگر ذخیره می‌شود.","Your role or tools":"نقش یا ابزارهای شما","e.g. Chemistry, Architecture, Chess":"مثلاً کیمیا، معماری، شطرنج","e.g. Class 11":"مثلاً صنف 11","e.g. Dance":"مثلاً رقص","e.g. High School Student, Scholarship Applicant, Junior Web Developer":"مثلاً شاگرد مکتب، متقاضی بورسیه، توسعه‌دهنده‌ی وب مبتدی","e.g. Main style, Years of experience, Teacher":"مثلاً سبک اصلی، سال‌های تجربه، استاد","e.g. My approach":"مثلاً روش من","e.g. My project website":"مثلاً وب‌سایت پروژه‌ی من","e.g. Olympiad medal, course certificate":"مثلاً مدال المپیاد، گواهی دوره","e.g. Performances":"مثلاً اجراها","e.g. Title, Venue, Date, Video link":"مثلاً عنوان، محل، تاریخ، لینک ویدیو","Art project {n} ({k}): title and link":"پروژه‌ی هنری {n} ({k}): عنوان و لینک","Every music project has a title, cover image and performance link":"هر پروژه‌ی موسیقی عنوان، تصویر جلد و لینک اجرا دارد","Music projects added ({n} of 5)":"پروژه‌های موسیقی اضافه‌شده ({n} از ۵)","Profile photo":"عکس پروفایل","Welcome":"خوش آمدید","Template":"قالب","Please complete:":"لطفاً تکمیل کنید:","Required:":"ضروری:","Recommended:":"توصیه می‌شود:","Completed":"تکمیل‌شده","Advanced":"پیشرفته","Present":"تا اکنون","Pashto (language)":"پشتو","Contacts":"اطلاعات تماس","Phone":"تلفن","Email":"ایمیل","City":"شهر","ID document":"سند هویت","Music projects":"پروژه‌های موسیقی","Performance":"اجرا","Original song":"آهنگ اصلی","{x}:":"{x}:","Related link":"لینک مرتبط","Untitled":"بدون عنوان","Your name":"نام شما","Pathfolio · Prepared on":"Pathfolio · تهیه‌شده در","Colour":"رنگ","Continue with {n}":"ادامه با {n}","Pick the look you like. You can change it at any time and everything you typed stays exactly as it is. The previews show sample content until you add your own.":"ظاهر دلخواه خود را انتخاب کنید. هر زمان می‌توانید آن را تغییر دهید و هرچه نوشته‌اید همان‌طور می‌ماند. پیش‌نمایش‌ها تا زمانی که معلومات خودتان را اضافه کنید، محتوای نمونه را نشان می‌دهند."},"ps":{"(optional)":"(اختیاري)",". Do not use “Anyone with the link”.":". د «هر هغه څوک چې لینک لري» اختیار مه کاروئ.","{n} of 5 required projects complete. All five are needed before you can create, print or send your PDF.":"{n} له ۵ اړین پروژو بشپړې شوې. د PDF له جوړولو، چاپ یا لیږلو مخکې ټولې پنځه پروژې اړینې دي.","{n} of 5 required projects complete.":"{n} له ۵ اړین پروژو بشپړې شوې.","{n}. Untitled":"{n}. بې سرلیکه","A little":"لږ","About Me":"زما په اړه","About me":"زما په اړه","Academic Templates":"اکاډمیک قالبونه","Achievement":"لاسته‌راوړنه","Achievements":"لاسته‌راوړنې","Add":"زیاتول","Add Field":"برخه زیاتول","Add Image":"انځور زیاتول","Add Link":"لینک زیاتول","Add Text":"متن زیاتول","Add Your Own Field of Study":"خپل د زده‌کړې څانګه زیاته کړئ","Add a field of study for all students":"د ټولو زده‌کوونکو لپاره د زده‌کړې څانګه زیاتول","Add achievement":"لاسته‌راوړنه زیاتول","Add any mix of text, links and images to this field.":"د دې څانګې لپاره د متن، لینک او انځورونو هر ډول ترکیب زیات کړئ.","Add as many achievements, courses or activities as you need. You can edit or remove any of them.":"هر شمېر چې اړتیا لرئ لاسته‌راوړنې، کورسونه یا فعالیتونه زیات کړئ. هر یو مو کولای شئ سم یا لرې کړئ.","Add field of study":"د زده‌کړې څانګه زیاتول","Add more content":"نور منځپانګه زیاتول","Add up to 5 projects. For each one, add a square cover image, a link to your own performance or recording, and a link to the original song. Set Google Drive links to “Anyone with the link can view” so the examiner can watch and give a score.":"تر ۵ پروژې زیاتې کړئ. د هرې پروژې لپاره یو څلورګوني پوښ انځور، ستاسو د اجرا یا ثبت لینک او د اصلي سندرې لینک زیات کړئ. د ګوګل ډرایو لینکونه په «هر هغه څوک چې لینک لري کولای شي وګوري» تنظیم کړئ چې ازموینکی یې وګوري او نمره ورکړي.","Added":"زیات شو","Admin":"مدیر","Admin account":"د مدیر حساب","Admin login":"د مدیر ننوتل","Admin login created. Download config.json and upload it to apply this for everyone.":"د مدیر ننوتل جوړ شو. config.json ډاونلوډ او پورته کړئ چې ټولو ته عملي شي.","Admin login needs a secure (HTTPS) page.":"د مدیر ننوتل خوندي (HTTPS) پاڼې ته اړتیا لري.","All five projects are required. Projects 1 to 3 are video projects: add a link to each video. Projects 4 and 5 are image projects: add a link to the original painting image. Set links to “Anyone with the link can view” so the examiner can open them.":"ټولې پنځه پروژې اړینې دي. ۱ تر ۳ پروژې ویډیويي دي: د هرې ویډیو لینک زیات کړئ. ۴ او ۵ پروژې انځوريزې دي: د نقاشۍ د اصلي انځور لینک زیات کړئ. لینکونه په «هر هغه څوک چې لینک لري کولای شي وګوري» تنظیم کړئ چې ازموینکی یې خلاص کړي.","App":"اپلیکېشن","Areas of interest":"د علاقې برخې","Art and Projects":"هنر او پروژې","Article":"مقاله","At least one portfolio area selected":"لږ تر لږه د پورټفولیو یوه څانګه ټاکل شوې ده","Back to editing":"سمون ته بیرته ستنیدل","Basic":"لومړنی","Beginner":"پیلوونکی","Best for Creative Fields":"د خلاقو څانګو لپاره غوره","Best for Internships":"د کارزده‌کړې لپاره غوره","Best for Long CVs":"د اوږدو سي‌ویو لپاره غوره","Best for Scholarships":"د بورسونو لپاره غوره","Best for Students":"د زده‌کوونکو لپاره غوره","Bold sidebar with photo, contacts and skills.":"غټ اړخیز ستون د انځور، اړیکو او مهارتونو سره.","Book":"کتاب","Built-in illustration in use.":"د پروګرام تلواله انځور کارول کېږي.","CV Builder":"د سي‌وي جوړوونکی","CV cleared":"سي‌وي پاک شو","Calm green with a sidebar on the right.":"ارام شنه رنګ د ښي اړخ ستون سره.","Cancel":"لغوه","Cancel edit":"سمون لغوه کول","Caption (optional)":"د انځور تشریح (اختیاري)","Certificate":"تصدیق‌لیک","Certificates":"تصدیق‌لیکونه","Change template":"قالب بدلول","Check the preview above carefully. Go back to Edit to fix anything.":"پورتنۍ مخکتنه په ډیر دقت وګورئ. د هر څه د سمولو لپاره سمون ته ستنیږئ.","Check your CV before saving it as a PDF.":"مخکې له دې چې د PDF په توګه یې خوندي کړئ خپل سي‌وي وګورئ.","Check your completed portfolio before saving it as a PDF.":"مخکې له دې چې د PDF په توګه یې خوندي کړئ خپل بشپړ پورټفولیو وګورئ.","Choose a configuration file":"د تنظیماتو فایل وټاکئ","Choose a logo image":"د لوګو انځور وټاکئ","Choose a professional template, add your information and download a polished CV for scholarships, education and job applications.":"یو مسلکي قالب وټاکئ، خپل معلومات زیات کړئ او د بورس، زده‌کړې او کار د غوښتنو لپاره یو ښه سي‌وي ډاونلوډ کړئ.","Choose an image":"یو انځور وټاکئ","Choose how to send it":"د لیږلو طریقه وټاکئ","Choose your CV template":"د خپل سي‌وي قالب وټاکئ","City and country":"ښار او هیواد","City or country":"ښار یا هیواد","City or province (optional)":"ښار یا ولایت (اختیاري)","Class":"ټولګی","Classic Academic":"کلاسیک اکاډمیک","Clean cards in cool tones.":"پاک کارتونه په سړو رنګونو کې.","Clear all":"ټول پاکول","Clear all information":"ټول معلومات پاکول","Clear all portfolio information on this device? This cannot be undone.":"په دې وسیله کې د پورټفولیو ټول معلومات پاک شي؟ دا کار بیرته نه شي کېدای.","Clear my CV":"زما سي‌وي پاکول","Clear my data from this device":"زما معلومات له دې وسیلې پاکول","Clear your whole CV on this device? This cannot be undone.":"په دې وسیله کې ټوله سي‌وي پاکه شي؟ دا کار بیرته نه شي کېدای.","Cleared":"پاک شو","Close":"تړل","Club":"کلب","Coach":"روزونکی","Colourful banner with rounded headings.":"رنګارنګ بینر د ګردو سرلیکونو سره.","Colourful layouts for art, design and creative fields.":"د هنر، ډیزاین او خلاقو څانګو لپاره رنګارنګ ډیزاینونه.","Compact Two-Column":"دوه ستونه فشرده","Competition":"سیالي","Competition or event":"سیالي یا پیښه","Competitions and results":"سیالۍ او پایلې","Confirm new password":"د نوي پټنوم تایید","Confirm password":"د پټنوم تایید","Contact Information":"د اړیکې معلومات","Conversational":"خبرو اترو کچه","Copy Message Text":"د پیغام متن کاپي کول","Copy config":"تنظیمات کاپي کول","Could not open the print window.":"د چاپ کړکۍ خلاصه نه شوه.","Could not read this file.":"دا فایل ونه لوستل شو.","Could not save the configuration: the browser storage is full or blocked. Remove an image and try again.":"تنظیمات خوندي نه شول: د براوزر حافظه ډکه یا بنده ده. یو انځور لرې کړئ او بیا هڅه وکړئ.","Could not save the file":"فایل خوندي نه شو","Could not save: the browser storage is full or blocked. Remove some images or free up space.":"خوندي نه شول: د براوزر حافظه ډکه یا بنده ده. څو انځورونه لرې کړئ یا ځای خالي کړئ.","Course":"کورس","Create Your CV":"خپل سي‌وي جوړ کړئ","Create Your CV card":"د «خپل سي‌وي جوړ کړئ» کارت","Create Your Portfolio":"خپل پورټفولیو جوړ کړئ","Create Your Portfolio card":"د «خپل پورټفولیو جوړ کړئ» کارت","Create a professional CV or showcase your skills, projects and achievements in a personalized portfolio.":"یو مسلکي سي‌وي جوړ کړئ یا خپل مهارتونه، پروژې او لاسته‌راوړنې په یو شخصي پورټفولیو کې وښایاست.","Create a username and password for this tool. Use at least 10 characters for the password. There is no password recovery. To reset it, remove the admin entry from config.json on your hosting.":"د دې وسیلې لپاره یو کارن‌نوم او پټنوم جوړ کړئ. پټنوم باید لږ تر لږه ۱۰ توري ولري. د پټنوم بیرته ترلاسه کول نشته. د بیا تنظیم لپاره په خپل هوسټینګ کې د config.json څخه د admin برخه لرې کړئ.","Create admin login":"د مدیر ننوتل جوړول","Creative Templates":"خلاق قالبونه","Creative Violet":"خلاق بنفشه","Current password":"اوسنی پټنوم","Dari":"دري","Dark banner with a serious, focused look.":"تیاره بینر د جدي او متمرکز بڼې سره.","Dark sidebar with strong contrast.":"تیاره اړخیز ستون د پیاوړي توپیر سره.","Date":"نېټه","Date or year":"نېټه یا کال","Degree or program":"سند یا برنامه","Describe what you did and the difference it made.":"ولیکئ چې څه مو وکړل او کوم توپیر مو رامنځته کړ.","Description":"تشریح","Description (optional)":"تشریح (اختیاري)","Details (optional)":"جزئیات (اختیاري)","Details copied from your portfolio":"معلومات ستاسو له پورټفولیو کاپي شول","Discard":"ردول","Discard draft":"مسوده ردول","Discard your draft changes on this device?":"په دې وسیله کې ستاسو د مسودې بدلونونه رد شي؟","Download PDF":"PDF ډاونلوډ","Download PDF opens your browser’s print window. Choose “Save as PDF” there. The PDF keeps selectable text and clickable links, and works without internet.":"د PDF ډاونلوډ ستاسو د براوزر د چاپ کړکۍ خلاصوي. هلته «د PDF په توګه خوندي کول» وټاکئ. د PDF متن د ټاکلو وړ او لینکونه کلیک‌وړ پاتې کېږي او پرته له انټرنېټ هم کار کوي.","Download backup":"بیک‌اپ ډاونلوډ","Download config.json":"config.json ډاونلوډ","Download your PDF first, or tick that you already have it.":"لومړی خپل PDF ډاونلوډ کړئ یا نښه کړئ چې دا مو لرئ.","Edit":"سمون","Editing software":"د سمون سافټویر","Education":"زده‌کړې","Elegant Rose":"ښکلی ګلابي","Email Address (optional)":"د بریښنالیک پته (اختیاري)","Email address":"د بریښنالیک پته","Email or phone":"بریښنالیک یا تلیفون","Email that receives portfolios":"هغه بریښنالیک چې پورټفولیوګانې ترلاسه کوي","Employer or organization":"کارګمارونکی یا سازمان","End":"پای","End (or Present)":"پای (یا اوس)","End year (or expected)":"د پای کال (یا تمه شوی)","English":"English","Equipment":"تجهیزات","Essay":"مقاله","Executive Slate":"اجرایي خړ","Expert":"متخصص","Explain what you built or created, your role and the result.":"ولیکئ چې څه مو جوړ یا پیدا کړل، ستاسو رول څه و او پایله څه شوه.","Field added":"څانګه زیاته شوه","Field of Study":"د زده‌کړې څانګه","Fields":"څانګې","Fields for each work (separate with commas; the first is the title)":"د هر اثر ساحې (په کوما جلا کړئ؛ لومړی سرلیک دی)","Fields of Study":"د زده‌کړې څانګې","Fill from my portfolio details":"زما د پورټفولیو له معلوماتو ډکول","Fits a lot of information neatly.":"ډیر معلومات په منظم ډول ځای کوي.","Fluent":"روان","Focus on achievements and results, not only responsibilities.":"په لاسته‌راوړنو او پایلو تمرکز وکړئ، نه یوازې په مسؤولیتونو.","Fresh Green":"تازه شین","Full name":"بشپړ نوم","Genre or style":"ژانر یا سبک","GitHub":"GitHub","GitHub:":"GitHub:","Gmail opened. Attach your downloaded PDF before sending.":"Gmail خلاص شو. مخکې له لیږلو خپل ډاونلوډ شوی PDF ورسره ضمیمه کړئ.","High School Student and Scholarship Applicant":"د لیسې زده‌کوونکی او د بورس غوښتونکی","Home":"کور","I already have my PDF file.":"زه خپل PDF فایل لرم.","I have reviewed all my information and it is correct.":"ما خپل ټول معلومات کتلي دي او سم دي.","ID Document Link":"د پېژندنې سند لینک","Illustration of a CV page":"د سي‌وي پاڼې انځور","Illustration of a portfolio gallery":"د پورټفولیو ګالرۍ انځور","Image":"انځور","Image added":"انځور زیات شو","Image projects":"انځوريز پروژې","In Progress":"په کار کې","In the print window, choose Save as PDF.":"د چاپ په کړکۍ کې «د PDF په توګه خوندي کول» وټاکئ.","Include":"شاملول","Include the result, rank or recognition you received.":"هغه پایله، رتبه یا درناوی چې مو ترلاسه کړ ولیکئ.","Incorrect username or password.":"کارن‌نوم یا پټنوم سم نه دی.","Intermediate":"منځنی","International":"نړیوال","Introduce yourself and your goals in two or three sentences":"خپل ځان او موخې په دوو یا درېو جملو کې معرفي کړئ","Issued by":"صادرونکی","Job title":"د دندې سرلیک","Language":"ژبه","Languages":"ژبې","Level":"کچه","Link":"لینک","Link (optional)":"لینک (اختیاري)","Link address":"د لینک پته","Link title":"د لینک سرلیک","Link to certificate or proof (optional)":"د تصدیق‌لیک یا ثبوت لینک (اختیاري)","Link to the original painting image":"د نقاشۍ د اصلي انځور لینک","Link to your Tazkira, passport or ID card":"ستاسو د تذکرې، پاسپورټ یا پېژندپاڼې لینک","LinkedIn":"LinkedIn","LinkedIn:":"LinkedIn:","Load config":"تنظیمات پورته کول","Local Configuration Tool":"د سیمه‌ییزو تنظیماتو وسیله","Log out":"وتل","Logo (optional)":"لوګو (اختیاري)","Main focus (e.g. portrait, nature, documentary)":"اصلي تمرکز (لکه پورټریټ، طبیعت، مستند)","Main genres":"اصلي ژانرونه","Main instrument or voice":"اصلي آله یا غږ","Main languages or tools":"اصلي ژبې یا وسیلې","Main medium (e.g. oil, watercolor, digital)":"اصلي مواد (لکه تیل رنګ، اوبه رنګ، ډیجیټل)","Main sport":"اصلي لوبه","Match":"سیالي","Mention your education, your strengths and what you want to achieve.":"د خپلو زده‌کړو، پیاوړتیاوو او هغه څه یادونه وکړئ چې غواړئ ترلاسه یې کړئ.","Mentor or club":"لارښود یا کلب","Midnight":"نیمه‌شپه","Minimal and elegant with centered headings.":"ساده او ښکلی د مرکزي سرلیکونو سره.","Modern Blue":"عصري آبي","Move Down":"ښکته کول","Move Down: {n}":"ښکته کول: {n}","Move Up":"پورته کول","Move Up: {n}":"پورته کول: {n}","Move section down":"برخه ښکته کول","Move section down: {n}":"برخه ښکته کول: {n}","Move section up":"برخه پورته کول","Move section up: {n}":"برخه پورته کول: {n}","Music":"موسیقي","Music projects (up to 5)":"د موسیقۍ پروژې (تر ۵)","Name":"نوم","National":"ملي","Native":"مورنۍ ژبه","New password (leave empty to keep the current one)":"نوی پټنوم (د اوسني ساتلو لپاره خالي پرېږدئ)","No":"نه","No achievements yet. Add your first one above.":"تر اوسه هیڅ لاسته‌راوړنه نشته. خپله لومړۍ پورته زیاته کړئ.","No extra content yet. Use the buttons above if you want to add some.":"تر اوسه اضافي منځپانګه نشته. که غواړئ پورته تڼۍ وکاروئ.","No image yet":"تر اوسه انځور نشته","No logo added.":"هیڅ لوګو نه دی زیات شوی.","No photo":"انځور نشته","Not Started":"نه دی پیل شوی","Not provided":"نه دی ورکړل شوی","Nothing added yet.":"تر اوسه څه نه دي زیات شوي.","Nothing added yet. This section is optional.":"تر اوسه څه نه دي زیات شوي. دا برخه اختیاري ده.","Ocean Cards":"د سمندر کارتونه","Or paste a configuration (JSON)":"یا یو تنظیمات (JSON) پېسټ کړئ","Organization":"سازمان","Organizer":"جوړونکی","Original Song Link":"د اصلي سندرې لینک","Original painting":"اصلي نقاشي","Other":"نور","PDF export is not available in this browser. Please open Pathfolio in Chrome, Edge, Firefox or Safari.":"په دې براوزر کې د PDF جوړول نشي کېدای. مهرباني وکړئ Pathfolio په Chrome، Edge، Firefox یا Safari کې خلاص کړئ.","PDF export is not available in this browser. You can still fill in and save everything. Open Pathfolio in Chrome, Edge, Firefox or Safari to create a PDF.":"په دې براوزر کې د PDF جوړول نشي کېدای. تاسو لا هم کولای شئ ټول څه ډک او خوندي کړئ. د PDF جوړولو لپاره Pathfolio په Chrome، Edge، Firefox یا Safari کې خلاص کړئ.","PDF step finished":"د PDF ګام بشپړ شو","Painting and Art":"نقاشي او هنر","Pashto":"پښتو","Password":"پټنوم","Pathfolio · Prepared on {d}":"Pathfolio · چمتو شوی په {d}","Personal Information":"شخصي معلومات","Phone Number (optional)":"د تلیفون شمېره (اختیاري)","Phone number":"د تلیفون شمېره","Photo added":"انځور زیات شو","Photo series":"د انځورونو لړۍ","Photography and Film":"انځورګري او فلم","Pick the look you like. You can change it at any time and everything you typed stays exactly as it is.":"هغه بڼه وټاکئ چې خوښه مو ده. هر وخت یې بدلولای شئ او هر څه چې مو لیکلي همداسې پاتې کېږي.","The previews show sample content until you add your own.":"مخکتنې تر هغه وخته نمونه منځپانګه ښیي چې تاسو خپل معلومات زیات کړئ.","Please choose a PNG, JPEG or WebP image smaller than 8 MB.":"مهرباني وکړئ د ۸ MB څخه کوچنی PNG، JPEG یا WebP انځور وټاکئ.","Please choose a PNG, JPEG or WebP image.":"مهرباني وکړئ یو PNG، JPEG یا WebP انځور وټاکئ.","Please complete: {x}":"مهرباني وکړئ بشپړ کړئ: {x}","Please confirm":"مهرباني وکړئ تایید کړئ","Please enter a name":"مهرباني وکړئ یو نوم ولیکئ","Please enter your full name first":"مهرباني وکړئ لومړی خپل بشپړ نوم ولیکئ","Please fill in the first field":"مهرباني وکړئ لومړۍ ساحه ډکه کړئ","Please fill in the title first":"مهرباني وکړئ لومړی سرلیک ولیکئ","Please read:":"مهرباني وکړئ ولولئ:","Please tick the consent box to continue.":"د دوام لپاره مهرباني وکړئ د رضایت خونه نښه کړئ.","Please tick: I have reviewed all my information":"مهرباني وکړئ نښه کړئ: ما خپل ټول معلومات کتلي دي","Please type a name for the field":"مهرباني وکړئ د څانګې لپاره یو نوم ولیکئ","Poem":"شعر","Portfolio Website or Other Link":"د پورټفولیو ویب‌پاڼه یا بل لینک","Portfolio completion: {n}%":"د پورټفولیو بشپړوالی: {n}٪","Position and organization":"دنده او سازمان","Position or event":"دنده یا پیښه","Prepared on {d}":"چمتو شوی په {d}","Preview":"مخکتنه","Preview image":"د مخکتنې انځور","Preview your CV":"خپل سي‌وي مخکتنه","Preview your portfolio":"خپل پورټفولیو مخکتنه","Preview: {n}":"مخکتنه: {n}","Print":"چاپ","Professional":"مسلکي","Professional Summary":"مسلکي لنډیز","Professional Templates":"مسلکي قالبونه","Professional Title":"مسلکي سرلیک","Project":"پروژه","Project {n}":"پروژه {n}","Project or Song Title":"د پروژې یا سندرې سرلیک","Project title":"د پروژې سرلیک","Projects":"پروژې","Projects and competitions":"پروژې او سیالۍ","Provincial":"ولایتي","Publish, backup and restore":"خپرول، بیک‌اپ او بیرته ترلاسه کول","Questions about the student (separate with commas)":"د زده‌کوونکي په اړه پوښتنې (په کوما جلا کړئ)","Race":"منډه","Reads sheet music":"نوټ لوستل","Recipient email":"د ترلاسه کوونکي بریښنالیک","Recommended: {x}":"وړاندیز: {x}","Record":"ریکارډ","Recreational":"تفریحي","References":"حوالې","References (optional)":"حوالې (اختیاري)","References available upon request":"حوالې د غوښتنې پر مهال وړاندې کېږي","Remove":"لرې کول","Remove field":"څانګه لرې کول","Remove photo":"انځور لرې کول","Remove this achievement?":"دا لاسته‌راوړنه لرې شي؟","Remove this content item?":"دا منځپانګه لرې شي؟","Remove this entry?":"دا مورد لرې شي؟","Remove this field and all of its content?":"دا څانګه او ټوله منځپانګه یې لرې شي؟","Remove this item from your CV?":"دا مورد ستاسو له سي‌وي لرې شي؟","Replace":"ځای نیول","Replace your current draft with this configuration?":"ستاسو اوسنی مسوده د دې تنظیماتو پر ځای شي؟","Required: {x}":"اړین: {x}","Research":"څیړنه","Responsibilities and results":"مسؤولیتونه او پایلې","Restore Default Image":"تلواله انځور بیرته راوستل","Restore from file":"له فایل څخه بیرته ترلاسه کول","Result or ranking":"پایله یا رتبه","Review your data":"خپل معلومات وګورئ","Robot":"روبوټ","Role":"رول","Save account changes":"د حساب بدلونونه خوندي کول","Save changes":"بدلونونه خوندي کول","Saved {x}":"{x} خوندي شو","Saved. Download config.json and upload it so students’ devices use the new login.":"خوندي شو. config.json ډاونلوډ او پورته کړئ چې د زده‌کوونکو وسیلې نوی ننوتل وکاروي.","Scholar":"پوهاند","School":"ښوونځی","School (optional)":"ښوونځی (اختیاري)","School or university":"ښوونځی یا پوهنتون","Select one or more Fields of Study, or add your own. Each field opens as its own section with optional text, link and image content.":"یوه یا څو د زده‌کړې څانګې وټاکئ یا خپله زیاته کړئ. هره څانګه د جلا برخې په توګه د اختیاري متن، لینک او انځور سره خلاصېږي.","Select...":"وټاکئ...","Selected":"ټاکل شوی","Selected Fields of Study":"ټاکل شوې د زده‌کړې څانګې","Share With Us":"له موږ سره شریک کړئ","Share only what you are comfortable sharing. School, city, phone, email and photo are optional. Your information stays on this device until you choose to share it.":"یوازې هغه شریک کړئ چې ورسره آرامه یاست. ښوونځی، ښار، تلیفون، بریښنالیک او انځور اختیاري دي. ستاسو معلومات په همدې وسیله کې پاتې کېږي تر هغې چې تاسو یې شریک نه کړئ.","Share via Email App":"د بریښنالیک اپلیکېشن له لارې شریکول","Share via Gmail":"د Gmail له لارې شریکول","Share Using Device":"د وسیلې په کارولو شریکول","Sharing is not available here. Use Gmail, the email app or copy the address.":"دلته شریکول نشي کېدای. Gmail، د بریښنالیک اپلیکېشن یا د پتې کاپي وکاروئ.","Sharing options":"د شریکولو اختیارونه","Short film":"لنډ فلم","Show password":"پټنوم ښودل","Hide password":"پټنوم پټول","Showcase":"د کارونو ښودنه","Showcase your field of study, skills, projects, creative work and achievements in a personalized portfolio.":"خپله د زده‌کړې څانګه، مهارتونه، پروژې، خلاق کارونه او لاسته‌راوړنې په یو شخصي پورټفولیو کې وښایاست.","Shows your journey step by step.":"ستاسو سفر ګام په ګام ښیي.","Skill":"مهارت","Skills":"مهارتونه","Skip to main content":"اصلي منځپانګې ته تلل","Soft and refined with a light sidebar.":"نرم او ښکلی د روښانه اړخیز ستون سره.","Speech":"وینا","Sports":"سپورت","Start":"پیل","Start year":"د پیل کال","Story":"کیسه","Structured layouts for internships and first jobs.":"د کارزده‌کړې او لومړۍ دندې لپاره منظم ډیزاینونه.","Student Details":"د زده‌کوونکي جزئیات","Student ID":"د زده‌کوونکي کوډ","Student’s Performance/Recording Link":"د زده‌کوونکي د اجرا یا ثبت لینک","Student’s performance":"د زده‌کوونکي اجرا","Style":"سبک","Sunrise":"لمر پورته کېدل","Teacher or music school":"ښوونکی یا د موسیقۍ زده‌کړځی","Teacher or studio":"ښوونکی یا سټوډیو","Team or club":"ټیم یا کلب","Technology and Science":"ټکنالوژي او ساینس","Template: {n}":"قالب: {n}","Text":"متن","The backup contains all settings, card images, the logo and the admin login record. Keep it somewhere safe.":"بیک‌اپ ټول تنظیمات، د کارتونو انځورونه، لوګو او د مدیر د ننوتلو ثبت لري. دا په یوه خوندي ځای کې وساتئ.","The current password is incorrect.":"اوسنی پټنوم سم نه دی.","The logo appears in the header only when you add one. Upload it only if you have permission to use it.":"لوګو یوازې هغه مهال په سر کې ښکاري چې تاسو یې زیات کړئ. یوازې هغه مهال یې پورته کړئ چې د کارولو اجازه لرئ.","The new password must have at least 10 characters.":"نوی پټنوم باید لږ تر لږه ۱۰ توري ولري.","The new passwords do not match.":"نوي پټنومونه سره نه ورته کېږي.","The password must have at least 10 characters.":"پټنوم باید لږ تر لږه ۱۰ توري ولري.","The passwords do not match.":"پټنومونه سره نه ورته کېږي.","This configuration is empty or not valid.":"دا تنظیمات خالي یا ناسم دي.","This file is not a supported image":"دا فایل ملاتړ شوی انځور نه دی","This file is not a valid image.":"دا فایل سم انځور نه دی.","This file is too large to be a configuration.":"دا فایل د تنظیماتو لپاره ډیر لوی دی.","This image is larger than 8 MB. Please choose a smaller one.":"دا انځور له ۸ MB لوی دی. مهرباني وکړئ کوچنی وټاکئ.","This image is too detailed to store. Please choose a simpler or smaller image.":"دا انځور د ساتلو لپاره ډیر جزئیات لري. مهرباني وکړئ ساده یا کوچنی انځور وټاکئ.","This is not a valid Pathfolio configuration.":"دا د Pathfolio سم تنظیمات نه دي.","This statement will appear in your CV. You do not need to enter anyone’s name or contact details.":"دا جمله ستاسو په سي‌وي کې راځي. اړتیا نشته د چا نوم یا د اړیکې معلومات ولیکئ.","This tool only changes settings on this device. It is not a server login and cannot protect data on its own. Settings reach students only after you export config.json and upload it to your hosting.":"دا وسیله یوازې د همدې وسیلې تنظیمات بدلوي. د سرور ننوتل نه دی او یوازې نشي کولای معلومات خوندي کړي. تنظیمات یوازې هغه مهال زده‌کوونکو ته رسېږي چې config.json صادر او په خپل هوسټینګ کې پورته کړئ.","This tool runs only in your browser. It is not a server login and does not provide real security. Your changes are saved as a draft on this device. Students see them only after you download":"دا وسیله یوازې ستاسو په براوزر کې چلېږي. د سرور ننوتل نه دی او ریښتینی امنیت نه برابروي. ستاسو بدلونونه په همدې وسیله کې د مسودې په توګه خوندي کېږي. زده‌کوونکي یې یوازې هغه مهال وینې چې تاسو ډاونلوډ کړئ","and upload it next to":"او دا د","on your hosting. Whoever can edit your hosting files controls what is published.":"په خپل هوسټینګ کې ورسره پورته کړئ. هر څوک چې ستاسو د هوسټینګ فایلونه سم کړي، هغه څه کنټرولوي چې خپرېږي.","Timeline":"مهال‌کرښه","Title":"سرلیک","Title (optional)":"سرلیک (اختیاري)","Title of the works list":"د اثارو د لیست سرلیک","Too many attempts. Try again in a minute.":"ډیرې هڅې شوې. یو دقیقه وروسته بیا هڅه وکړئ.","Tools":"وسایل","Tools or software":"وسایل یا سافټویر","Tournament":"ټورنمنټ","Traditional and trusted. Navy and gold.":"دودیز او د باور وړ. نیلي او زرین.","Traditional layouts for scholarships and school applications.":"د بورسونو او زده‌کړې غوښتنو لپاره دودیز ډیزاینونه.","Training camp":"روزنیز کمپ","Type":"ډول","Updated":"تازه شو","Upload Image":"انځور پورته کول","Replace Image":"انځور ځای نیول","Remove Image":"انځور لرې کول","Upload Logo":"لوګو پورته کول","Replace Logo":"لوګو ځای نیول","Remove Logo":"لوګو لرې کول","Upload cover image":"د پوښ انځور پورته کول","Upload image":"انځور پورته کول","Replace image":"انځور ځای نیول","Upload photo":"انځور پورته کول","Upload preview image (optional)":"د مخکتنې انځور پورته کول (اختیاري)","Upload the document to Google Drive and share it only with":"سند په Google Drive کې پورته کړئ او یوازې له","Use This Template":"دا قالب کارول","Use This Template: {n}":"دا قالب کارول: {n}","Use landscape images. They are cropped to a 16:9 shape (960 × 560) and compressed automatically. PNG, JPEG or WebP, up to 8 MB.":"افقي انځورونه وکاروئ. دا انځورونه د ۱۶:۹ بڼې (۹۶۰ × ۵۶۰) ته پرې کېږي او په اتوماتيک ډول کمپرس کېږي. PNG، JPEG یا WebP تر ۸ MB.","Username":"کارن‌نوم","Username: 3 to 40 letters, numbers or . _ @ -":"کارن‌نوم: ۳ تر ۴۰ توري، شمېرې یا . _ @ -","Video":"ویډیو","Video link":"د ویډیو لینک","Video projects":"ویډیويي پروژې","Volunteer Experience":"داوطلبانه تجربه","Volunteering":"داوطلبي","Warm colours and soft cards.":"تود رنګونه او نرم کارتونه.","Website":"ویب‌پاڼه","Website or portfolio link":"ویب‌پاڼه یا د پورټفولیو لینک","Website:":"ویب‌پاڼه:","Welcome card images":"د هرکلي کارتونو انځورونه","Welcome to Pathfolio":"Pathfolio ته ښه راغلاست","What does this image show?":"دا انځور څه ښيي؟","What you did":"هغه څه چې مو وکړل","Where published, or link":"چېرته خپور شوی، یا لینک","Where shown, or link":"چېرته ښودل شوی، یا لینک","Work Experience":"د کار تجربه","Works":"اثار","Works and activities":"اثار او فعالیتونه","Write two or three sentences about your education, strengths, interests and future goals.":"د خپلو زده‌کړو، پیاوړتیاوو، علاقو او راتلونکو موخو په اړه دوه یا درې جملې ولیکئ.","Write your description or reflection here":"خپل تشریح یا نظر دلته ولیکئ","Writing and Literature":"لیکوالي او ادب","Written and published works":"لیکل شوي او خپاره شوي اثار","Year":"کال","Years of experience":"د تجربې کلونه","Yes":"هو","You are back online.":"تاسو بیا آنلاین شوئ.","You are offline. You can keep working. Everything is saved on this device.":"تاسو آفلاین یاست. کولای شئ کار ته دوام ورکړئ. هر څه په همدې وسیله کې خوندي کېږي.","You can add up to 12 fields":"تاسو تر ۱۲ پورې څانګې زیاتولای شئ","Your PDF is not attached automatically. After your email opens, attach the PDF you downloaded.":"ستاسو PDF په اتوماتيک ډول نه ضمیمه کېږي. وروسته له دې چې بریښنالیک خلاص شو، ډاونلوډ شوی PDF ضمیمه کړئ.","Your details are placed in the chosen template automatically. Optional sections can be turned off or moved. Your CV is saved on this device.":"ستاسو معلومات په اتوماتيک ډول په ټاکل شوي قالب کې ځای کېږي. اختیاري برخې بندولای یا خوځولای شئ. ستاسو سي‌وي په همدې وسیله کې خوندي کېږي.","Your email app should open. Attach your downloaded PDF before sending.":"ستاسو د بریښنالیک اپلیکېشن باید خلاص شي. مخکې له لیږلو ډاونلوډ شوی PDF ضمیمه کړئ.","Your field":"ستاسو څانګه","Your information is saved only in this browser.":"ستاسو معلومات یوازې په همدې براوزر کې خوندي کېږي.","Your role or tools":"ستاسو رول یا وسایل","e.g. Chemistry, Architecture, Chess":"لکه کیمیا، معماري، شطرنج","e.g. Class 11":"لکه ۱۱ ټولګی","e.g. Dance":"لکه نڅا","e.g. High School Student, Scholarship Applicant, Junior Web Developer":"لکه د لیسې زده‌کوونکی، د بورس غوښتونکی، نوی ویب جوړوونکی","e.g. Main style, Years of experience, Teacher":"لکه اصلي سبک، د تجربې کلونه، ښوونکی","e.g. My approach":"لکه زما طریقه","e.g. My project website":"لکه زما د پروژې ویب‌پاڼه","e.g. Olympiad medal, course certificate":"لکه د المپیاد مډال، د کورس تصدیق‌لیک","e.g. Performances":"لکه اجراګانې","e.g. Title, Venue, Date, Video link":"لکه سرلیک، ځای، نېټه، د ویډیو لینک","Art project {n} ({k}): title and link":"د هنر پروژه {n} ({k}): سرلیک او لینک","Every music project has a title, cover image and performance link":"د موسیقۍ هره پروژه سرلیک، د پوښ انځور او د اجرا لینک لري","Music projects added ({n} of 5)":"زیاتې شوې د موسیقۍ پروژې ({n} له ۵)","Profile photo":"د پروفایل انځور","Welcome":"ښه راغلاست","Template":"قالب","Please complete:":"مهرباني وکړئ بشپړ کړئ:","Required:":"اړین:","Recommended:":"وړاندیز:","Completed":"بشپړ شوی","Advanced":"پرمختللی","Present":"تر اوسه","Pashto (language)":"پښتو","Contacts":"اړیکې","Phone":"تلیفون","Email":"بریښنالیک","City":"ښار","ID document":"د پېژندنې سند","Music projects":"د موسیقۍ پروژې","Performance":"اجرا","Original song":"اصلي سندره","{x}:":"{x}:","Related link":"اړوند لینک","Untitled":"بې سرلیکه","Your name":"ستاسو نوم","Pathfolio · Prepared on":"Pathfolio · چمتو شوی په","Colour":"رنګ","Continue with {n}":"د {n} سره دوام","Pick the look you like. You can change it at any time and everything you typed stays exactly as it is. The previews show sample content until you add your own.":"هغه بڼه وټاکئ چې خوښه مو ده. هر وخت یې بدلولای شئ او هر څه چې مو لیکلي همداسې پاتې کېږي. مخکتنې تر هغه وخته نمونه منځپانګه ښیي چې تاسو خپل معلومات زیات کړئ."}}/*TR_END*/;
+try{var sl0=localStorage.getItem("pathpolio-lang");if(sl0&&LANGS[sl0])LANG=sl0}catch(e){}
+var PAT=[],TA=["placeholder","title","aria-label","alt"];
+function buildPat(){PAT=[];var d=TR[LANG]||{};Object.keys(d).forEach(function(k){if(k.indexOf("{")>-1){var names=[],re=k.replace(/[.*+?^$()|[\]\\]/g,"\\$&").replace(/\{(\w+)\}/g,function(_,n){names.push(n);return "([\\s\\S]+?)"});PAT.push({re:new RegExp("^"+re+"$"),names:names,tr:d[k]})}})}
+function t(s){var d=TR[LANG];if(!d||typeof s!=="string")return s;if(Object.prototype.hasOwnProperty.call(d,s)&&d[s])return d[s];for(var i=0;i<PAT.length;i++){var m=s.match(PAT[i].re);if(m){var r=PAT[i].tr;PAT[i].names.forEach(function(n,j){r=r.split("{"+n+"}").join(t(m[j+1]))});return r}}return s}
+var MON={fa:["\u062c\u0646\u0648\u0631\u06cc","\u0641\u0628\u0631\u0648\u0631\u06cc","\u0645\u0627\u0631\u0686","\u0627\u067e\u0631\u06cc\u0644","\u0645\u06cc","\u062c\u0648\u0646","\u062c\u0648\u0644\u0627\u06cc","\u0627\u06af\u0633\u062a","\u0633\u067e\u062a\u0645\u0628\u0631","\u0627\u06a9\u062a\u0648\u0628\u0631","\u0646\u0648\u0645\u0628\u0631","\u062f\u0633\u0645\u0628\u0631"],ps:["\u062c\u0646\u0648\u0631\u064a","\u0641\u0628\u0631\u0648\u0631\u064a","\u0645\u0627\u0631\u0686","\u0627\u067e\u0631\u06d0\u0644","\u0645\u06cd","\u062c\u0648\u0646","\u062c\u0648\u0644\u0627\u06cc","\u0627\u06ab\u0633\u062a","\u0633\u067e\u062a\u0645\u0628\u0631","\u0627\u06a9\u062a\u0648\u0628\u0631","\u0646\u0648\u0645\u0628\u0631","\u062f\u0633\u0645\u0628\u0631"]};
+function fmtDate(){var d=new Date();if(MON[LANG])return d.getDate()+" "+MON[LANG][d.getMonth()]+" "+d.getFullYear();try{return d.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}catch(e){return d.toLocaleDateString()}}
+function docDir(){return LANGS[LANG].dir}
+function trText(n){var p=n.parentNode;if(!p||/^(TEXTAREA|SCRIPT|STYLE|OPTION_X)$/.test(p.nodeName)||(p.closest&&p.closest("[translate=no],[data-user]")))return;
+if(n.__tr===undefined||n.nodeValue!==n.__tr)n.__en=n.nodeValue;var m=(n.__en||"").match(/^(\s*)([\s\S]*?)(\s*)$/);if(!m||!m[2])return;var o=m[1]+t(m[2])+m[3];n.__tr=o;if(n.nodeValue!==o)n.nodeValue=o}
+function trAttr(el){if(el.closest&&el.closest("[translate=no],[data-user]"))return;TA.forEach(function(a){if(!el.hasAttribute(a))return;var cur=el.getAttribute(a),k="__en_"+a,k2="__tr_"+a;if(el[k]===undefined||cur!==el[k2])el[k]=cur;var o=t(el[k]);el[k2]=o;if(cur!==o)el.setAttribute(a,o)})}
+function trTree(r){if(!r)return;if(r.nodeType===3){trText(r);return}if(r.nodeType!==1)return;var w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT,null),n,l=[];while(n=w.nextNode())l.push(n);l.forEach(trText);if(r.matches&&r.matches("[placeholder],[title],[aria-label],[alt]"))trAttr(r);[].forEach.call(r.querySelectorAll("[placeholder],[title],[aria-label],[alt]"),trAttr)}
+var OBC={childList:true,subtree:true,attributes:true,attributeFilter:TA,characterData:true},OBS=null;
+function obsOn(){if(OBS)OBS.observe(document.body,OBC)}
+function applyLang(){var L=LANGS[LANG];document.documentElement.lang=L.n==="English"?"en":(LANG==="fa"?"fa-AF":"ps");document.documentElement.dir=L.dir;buildPat();if(OBS)OBS.disconnect();trTree(document.body);obsOn();var s=$("lang");if(s)s.value=LANG;[$("cv"),$("cvx"),$("cv-tpl")].forEach(function(e){if(e)e.setAttribute("dir",L.dir)})}
+function setLang(l){if(!LANGS[l])return;LANG=l;try{localStorage.setItem("pathpolio-lang",l)}catch(e){}applyLang();reRender()}
+function startI18n(){OBS=new MutationObserver(function(ms){OBS.disconnect();ms.forEach(function(m){if(m.type==="childList")m.addedNodes.forEach(trTree);else if(m.type==="attributes")trAttr(m.target);else if(m.type==="characterData")trText(m.target)});obsOn()});applyLang()}
+
+var F=["name","code","grade","school","city","idlink","phone","email","linkedin","github","site","bio"];
+var LV=["Beginner","Intermediate","Good","Advanced","Expert"];
+function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function safeUrl(u){u=(u||"").trim();if(!u)return"";if(!/^https?:\/\//i.test(u))u="https://"+u;return /^https?:\/\/[^\s]+$/i.test(u)?u:""}
+function okImg(d){return /^data:image\/(png|jpeg);base64,[A-Za-z0-9+\/=]+$/.test(d||"")?d:""}
+var tt;function toast(m,err){var e=$(err?"toast-err":"toast"),x=t(m);e.textContent=x;e.classList.add("show");clearTimeout(tt);tt=setTimeout(function(){e.classList.remove("show")},err?7000:2600)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D));return true}catch(e){toast("Could not save: the browser storage is full or blocked. Remove some images or free up space.",1);return false}}
+function dots(n){var h='<span class="lvl" title="'+LV[n-1]+'">';for(var i=1;i<=5;i++)h+='<i class="'+(i<=n?"on":"")+'"></i>';return h+"</span>"}
+var IC={
+mail:'<path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+linkedin:'<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
+github:'<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>',
+link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+id:'<rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5M13 14h5"/>',
+pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+school:'<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>',
+book:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+cap:'<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/>',
+hash:'<path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/>',
+camera:'<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+play:'<circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>',
+note:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>',
+eye:'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',
+eyeoff:'<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>',
+doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+folder:'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',
+medal:'<circle cx="12" cy="15" r="6"/><path d="M8.5 9.8L6.5 3h4l1.5 4 1.5-4h4l-2 6.8"/>',
+heart:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+briefcase:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+globe:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+up:'<polyline points="18 15 12 9 6 15"/>',
+down:'<polyline points="6 9 12 15 18 9"/>',
+text:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>',
+back:'<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
+dash:'<circle cx="12" cy="12" r="10" stroke-dasharray="3.2 3.2"/>',
+clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+check:'<polyline points="20 6 9 17 4 12"/>',
+x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
+copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+print:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+palette:'<circle cx="13.5" cy="6.5" r=".6"/><circle cx="17.5" cy="10.5" r=".6"/><circle cx="8.5" cy="7.5" r=".6"/><circle cx="6.5" cy="12.5" r=".6"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.84-.44-1.13-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.67h2c3.05 0 5.55-2.5 5.55-5.55C21.97 6.01 17.46 2 12 2z"/>',
+activity:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
+cpu:'<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>',
+grid:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+refresh:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>'
+};
+function ic(n,s,c){return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="'+(c||"currentColor")+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(IC[n]||"")+'</svg>'}
+[].forEach.call(document.querySelectorAll("[data-ic]"),function(el){el.innerHTML=ic(el.getAttribute("data-ic"),+(el.getAttribute("data-s")||16))});
+
+function item(k,i,main,sub){return '<div class="item"><div class="row"><span>'+main+'</span><button class="del" data-k="'+k+'" data-i="'+i+'">Remove</button></div>'+(sub?'<div class="mute">'+sub+'</div>':'')+'</div>'}
+var EDIT=-1,AI={Achievement:"trophy",Course:"book",Competition:"flag",Volunteering:"heart",Other:"star"};
+function clearAc(){["ac-title","ac-org","ac-date","ac-link"].forEach(function(id){$(id).value=""});$("ac-type").selectedIndex=0;$("ac-add").textContent="Add achievement";$("ac-cancel").hidden=true;EDIT=-1}
+function renderLists(){
+  $("ac-list").innerHTML=D.ach.length?D.ach.map(function(x,i){var u=safeUrl(x.link);return '<div class="item"><div class="row"><span><span class="aico">'+ic(AI[x.type]||"star",18)+'</span><b>'+esc(x.title)+'</b> <span class="chip">'+esc(x.type)+'</span></span><span class="nw"><button class="del ed" data-ace="'+i+'">Edit</button> <button class="del" data-k="ach" data-i="'+i+'">Remove</button></span></div><div class="mute">'+esc(x.org)+' '+esc(x.date)+(u?' <a href="'+esc(u)+'" target="_blank" rel="noopener">Link</a>':'')+'</div></div>'}).join(""):'<p class="empty">No achievements yet. Add your first one above.</p>';
+  progress();
+}
+function progress(){
+  var f=F.filter(function(k){return (D.p[k]||"").trim()}).length;
+  var ent=D.ach.length||D.mp.some(function(m){return m&&m.t})||Object.keys(D.ce).some(function(k){return (D.ce[k]||[]).length});
+  var n=Math.round(f/F.length*70+(D.cats.length?15:0)+(ent?15:0));
+  $("pbar").style.width=n+"%";$("pbarw").setAttribute("aria-valuenow",n);$("ptext").textContent="Portfolio completion: "+n+"%";
+}
+function showPhoto(){var d=okImg(D.p.photo);$("pv-photo").innerHTML=d?'<img src="'+d+'" alt="">':'No photo';$("rm-photo").hidden=!d}
+var P="#5b2d8e";
+function lkx(u,t){return '<a data-pdf="1" href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(t)+'</a>'}
+function L(raw){var u=safeUrl(raw);return u?lkx(u,"Link"):esc(raw||"")}
+function pi(i,l,v){return v?'<div class="pi">'+ic(i,14,P)+'<span class="k">'+l+'</span><span class="v">'+v+'</span></div>':""}
+function renderCV(){
+  var p=D.p,ph=okImg(p.photo);
+  var det=pi("hash","Student ID",esc(p.code||""))+pi("cap","Class",esc(p.grade||""))+pi("school","School",esc(p.school||""))+pi("pin","City",esc(p.city||""))+pi("id","ID document",L(p.idlink));
+  var ph2=(p.phone||"").trim(),tel=ph2.replace(/[^\d+]/g,""),em=(p.email||"").trim();
+  var con=pi("phone","Phone",ph2?(tel?lkx("tel:"+tel,ph2):esc(ph2)):"")+pi("mail","Email",em?lkx("mailto:"+em,em):"")+pi("linkedin","LinkedIn",L(p.linkedin))+pi("github","GitHub",L(p.github))+pi("link","Website",L(p.site));
+  var h='<div class="inst"><b>Portfolio</b></div>';
+  h+='<div class="hero"><div class="who">'+(ph?'<img class="av" src="'+ph+'" alt="">':'')+'<div class="ht"><h2>'+esc(p.name||"Your name")+'</h2>'+(D.cats.length?'<p>'+D.cats.map(function(k){return '<span>'+CATS[k].n+'</span>'}).join(" \u00b7 ")+'</p>':'')+'</div></div>'+((det||con)?'<div class="panel">'+(det?'<h4>Student Details</h4>'+det:'')+(con?'<h4'+(det?' class="gap"':'')+'>Contacts</h4>'+con:'')+'</div>':'')+'</div><div class="body">';
+  if(p.bio)h+='<div class="about"><h3>About me</h3><div class="bio">'+esc(p.bio).replace(/\n/g,"<br>")+'</div></div>';
+  h+=catCV();
+  if(D.ach.length)h+='<h3>'+ic("trophy",20,P)+'Achievements</h3><div class="alist">'+D.ach.map(function(x){var u=safeUrl(x.link);return '<div class="acard"><span class="aic">'+ic(AI[x.type]||"star",22,"#fff")+'</span><div class="abody"><b class="atitle">'+esc(x.title)+'</b><div class="ameta"><span class="chip">'+esc(x.type)+'</span> '+esc([x.org,x.date].filter(Boolean).join(" \u00b7 "))+'</div>'+(u?'<div class="alink">'+lkx(u,"Link")+'</div>':'')+'</div></div>'}).join("")+'</div>';
+  if(!p.name&&!D.ach.length&&!D.cats.length)h+='<p class="empty">Nothing here yet. Go to the Edit tab and add your information.</p>';
+  $("cv").setAttribute("dir",docDir());$("cv").innerHTML=h+'<div class="foot">Prepared on '+fmtDate()+'</div></div>';
+}
+F.forEach(function(f){var el=$(f);el.value=D.p[f]||"";el.addEventListener("input",function(){D.p[f]=el.value;save();progress()})});
+function add(k,obj,req,clear){if(!obj[req].trim()){toast("Please fill in the title or name first");return}D[k].push(obj);save();clear.forEach(function(id){$(id).value=""});renderLists();toast("Added")}
+$("ac-add").onclick=function(){var o={title:$("ac-title").value.trim(),type:$("ac-type").value,org:$("ac-org").value,date:$("ac-date").value,link:$("ac-link").value.trim()};if(!o.title){fieldErr($("ac-title"),"ac-err","Please fill in the title first");return}fieldErr($("ac-title"),"ac-err","");if(EDIT>-1){D.ach[EDIT]=o;toast("Updated")}else{D.ach.push(o);toast("Added")}save();clearAc();renderLists()};
+$("ac-cancel").onclick=clearAc;
+document.addEventListener("click",function(e){var a=e.target.closest("[data-ace]");if(!a)return;var i=+a.dataset.ace,x=D.ach[i];EDIT=i;$("ac-title").value=x.title||"";$("ac-type").value=x.type||"Achievement";$("ac-org").value=x.org||"";$("ac-date").value=x.date||"";$("ac-link").value=x.link||"";$("ac-add").textContent="Save changes";$("ac-cancel").hidden=false;$("ac-title").focus()});
+document.addEventListener("click",function(e){var b=e.target.closest(".del[data-k]");if(!b)return;var kk=b.dataset.k,ii=+b.dataset.i;ask("Remove this achievement?","Remove",function(){D[kk].splice(ii,1);save();clearAc();renderLists()})});
+$("reset").onclick=function(){ask("Clear all portfolio information on this device? This cannot be undone.","Clear all",function(){D={p:{},skills:[],projects:[],ach:[],cats:[],cd:{},ce:{},mp:[{},{},{},{},{}],ap:[{},{},{},{},{}],cf:[],blocks:{}};syncUF();save();F.forEach(function(f){$(f).value=""});$("reviewed").checked=false;showPhoto();renderCats();renderLists();renderHome();toast("Cleared")})};
+
+/* profile photo */
+$("up").onclick=function(){$("in-photo").click()};
+$("in-photo").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();
+  r.onload=function(){var im=new Image();im.onload=function(){var m=Math.min(im.width,im.height),c=document.createElement("canvas");c.width=c.height=420;var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,420,420);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,420,420);D.p.photo=c.toDataURL("image/jpeg",0.85);save();showPhoto();toast("Photo added")};im.onerror=function(){toast("This file is not a supported image")};im.src=r.result};
+  r.readAsDataURL(f);e.target.value=""});
+$("rm-photo").onclick=function(){delete D.p.photo;save();showPhoto()};
+
+function tab(v){show(v?"view":"edit");if(v){renderCV();renderReview()}}
+$("t-edit").onclick=function(){tab(false)};$("t-view").onclick=function(){tab(true)};
+
+/* ===== PDF: native offline creation in Android; browser print-to-PDF fallback ===== */
+var PDFOK=typeof window.print==="function",PDF_DONE={};
+function pdfName(kind){var nm=((kind==="cv"?CVD.p.name:D.p.name)||"").trim().replace(/[\\\/:*?"<>|\x00-\x1f]+/g,"").replace(/\s+/g,"_").replace(/^_+|_+$/g,"");return (nm?nm+"_":"")+"CV_Portfolio.pdf"}
+function fileBase(kind){return pdfName(kind).replace(/\.pdf$/i,"")}
+function printDoc(kind,cb){if(!PDFOK){toast("PDF export is not available in this browser. Please open this app in Chrome, Edge, Firefox or Safari.",1);return}
+var old=document.title,done=false,fin=function(){if(done)return;done=true;window.removeEventListener("afterprint",fin);document.title=old;PDF_DONE[kind]=true;if(cb)cb()};
+document.title=fileBase(kind);window.addEventListener("afterprint",fin);toast("In the print window, choose Save as PDF.");
+setTimeout(function(){try{if(window.PathfolioNative&&typeof window.PathfolioNative.printPage==="function")window.PathfolioNative.printPage(document.title);else window.print();setTimeout(fin,500)}catch(e){fin();toast("Could not open the print window.",1)}},80)}
+function downloadPdf(kind,cb){var name=pdfName(kind);if(window.PathfolioNative&&typeof window.PathfolioNative.savePage==="function"){toast("Creating PDF…");setTimeout(function(){try{window.PathfolioNative.savePage(fileBase(kind),name);PDF_DONE[kind]=true;if(cb)cb()}catch(e){toast("Could not create the PDF.",1)}},80);return}printDoc(kind,cb)}
+function copyText(s,okMsg){function fb(){var a=document.createElement("textarea");a.value=s;a.setAttribute("readonly","");a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();var ok=false;try{ok=document.execCommand("copy")}catch(e){}a.remove();toast(ok?okMsg:"Copy failed. Please copy it by hand.",ok?0:1)}
+if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(s).then(function(){toast(okMsg)},fb);else fb()}
+function shareText(){var p=D.p,nm=(p.name||"").trim()||"-",id=(p.code||"").trim()||"-";return{subject:"CV and Portfolio \u2013 "+nm,body:"Please find my completed portfolio attached.\n\nName: "+nm+"\nStudent ID: "+id+"\n"}}
+function linkOut(url,blank){var a=document.createElement("a");a.href=url;if(blank){a.target="_blank";a.rel="noopener noreferrer"}document.body.appendChild(a);a.click();a.remove()}
+function openShare(){var tx=shareText(),canShare=!!navigator.share,
+m=openModal({title:"Share With Us",cls:"share",focus:"#sh-pdf",html:'<p>Share your completed portfolio with us.</p>'
++'<div class="stepbox"><b>1.</b><button type="button" class="btn" id="sh-pdf">'+ic("download",18)+'Download PDF</button><span class="okmsg" id="sh-ok" hidden>'+ic("check",18)+'<span>PDF step finished</span></span></div>'
++'<label class="chk"><input type="checkbox" id="sh-have"><span>I already have my PDF file.</span></label>'
++'<label class="chk"><input type="checkbox" id="sh-consent"><span>I agree to share this portfolio. If I am under 18, my parent or guardian agrees too.</span></label>'
++'<div class="stepbox"><b>2.</b><span>Choose how to send it</span></div>'
++'<div class="shopts" role="group" aria-label="Sharing options">'+(canShare?'<button type="button" class="btn ghost" id="sh-dv" data-need>'+ic("share",18)+'Share Using Device</button>':'<button type="button" class="btn ghost" id="sh-msg" data-need>'+ic("copy",18)+'Copy Message Text</button>')+'</div>'
++'<p class="mute" id="sh-st" role="status"></p><p class="mute">Select the downloaded PDF in the app you use for sharing.</p>'});
+var r=m.root,have=r.querySelector("#sh-have"),con=r.querySelector("#sh-consent"),st=r.querySelector("#sh-st");con.checked=!!D.p.consent;
+function upd(){var pdf=PDF_DONE.pf||have.checked,ready=pdf&&con.checked;[].forEach.call(r.querySelectorAll("[data-need]"),function(b){b.disabled=!ready});r.querySelector("#sh-ok").hidden=!PDF_DONE.pf;st.textContent=ready?"":(!pdf?"Download your PDF first, or tick that you already have it.":"Please tick the consent box to continue.")}
+have.onchange=upd;con.onchange=function(){D.p.consent=con.checked;save();upd()};upd();
+r.querySelector("#sh-pdf").onclick=function(){downloadPdf("pf",upd)};
+if(canShare)r.querySelector("#sh-dv").onclick=function(){navigator.share({title:tx.subject,text:tx.body}).catch(function(e){if(e&&e.name!=="AbortError")toast("Sharing is not available here.",1)})};
+else r.querySelector("#sh-msg").onclick=function(){copyText(tx.subject+"\n\n"+tx.body,"Message text copied.")}}
+$("pdf").onclick=function(){downloadPdf("pf")};
+$("print").onclick=function(){if(gate())printDoc("pf")};
+$("share-btn").onclick=function(){if(gate())openShare()};
+/* portfolio areas */
+function fld(g,k,i,o,v){var a='data-g="'+g+'" data-k="'+k+'" data-i="'+i+'"';v=v||"";if(!o)return '<input '+a+' value="'+esc(v)+'">';if(g==="cd")o=[""].concat(o);return '<select '+a+'>'+o.map(function(x){return '<option value="'+x+'"'+(x===v?' selected':'')+'>'+(x||"Select...")+'</option>'}).join("")+'</select>'}
+function renderCE(k){var el=$("cl-"+k);if(!el)return;var L=D.ce[k]||[];el.innerHTML=L.length?L.map(function(v,i){var r=v.slice(1).filter(Boolean).map(esc).join(", ");return '<div class="item"><div class="row"><span><b>'+esc(v[0])+'</b></span><button class="del" data-ce="'+k+'" data-i="'+i+'">Remove</button></div>'+(r?'<div class="mute">'+r+'</div>':'')+'</div>'}).join(""):'<p class="empty">Nothing added yet.</p>'}
+var ACC_OPEN=null,FIC={music:"note",art:"palette",sport:"activity",photo:"camera",write:"pen",tech:"cpu",other:"star"};
+function fIc(k){return FIC[k]||(k.indexOf("u_")===0?"folder":"grid")}
+function fStatus(k){var C=CATS[k],dv=D.cd[k]||[],n=0;(C.d||[]).forEach(function(f,i){if((dv[i]||"").trim())n++});
+var ents=(D.ce[k]||[]).length,bl=(D.blocks[k]||[]).filter(function(b){return (b.t==="text"&&(b.text||"").trim())||(b.t==="link"&&safeUrl(b.url))||(b.t==="image"&&okImg(b.img))}).length,any=n+ents+bl,done=false;
+if(k==="music"){var a=D.mp.filter(function(m){return m&&(m.t||m.v||m.o||m.img)}).length,g=D.mp.filter(function(m){return m&&(m.t||"").trim()&&safeUrl(m.v)}).length;any+=a;done=g>=1&&n>=1}
+else if(k==="art"){var a2=D.ap.filter(function(m){return m&&(m.t||m.v||m.img)}).length,g2=D.ap.filter(function(m){return m&&(m.t||"").trim()&&safeUrl(m.v)}).length;any+=a2;done=g2===5}
+else if(k.indexOf("u_")===0)done=bl>=1;else done=n>=2&&(ents>=1||bl>=1);
+return any===0?"none":done?"done":"prog"}
+var STT={none:["Not Started","dash","sb-none"],prog:["In Progress","clock","sb-prog"],done:["Completed","check","sb-done"]};
+function sbHtml(s){var x=STT[s];return '<span class="sb '+x[2]+'">'+ic(x[1],16)+'<span>'+x[0]+'</span></span>'}
+function entriesUI(k){var C=CATS[k];return '<h4 class="subh">'+C.en+'</h4><div class="grid">'+C.e.map(function(f,i){return '<label>'+f[0]+fld("ce",k,i,f[1],"")+'</label>'}).join("")+'</div><p><button type="button" class="btn" data-addce="'+k+'">'+ic("plus",16)+'Add</button></p><div id="cl-'+k+'"></div>'}
+function accHtml(k){var C=CATS[k],u=k.indexOf("u_")===0,dv=D.cd[k]||[],open=(k===ACC_OPEN),inner;
+if(u)inner='<div class="ufh"><label>Field of Study<input data-ufn="'+k+'" value="'+esc(C.n)+'"></label><button type="button" class="del" data-ufx="'+k+'">'+ic("trash",16)+'Remove field</button></div>';
+else inner='<div class="grid">'+C.d.map(function(f,i){return '<label>'+f[0]+fld("cd",k,i,f[1],dv[i])+'</label>'}).join("")+'</div>'+(PR[k]?projUI(k):entriesUI(k));
+return '<div class="acc-item" data-acc="'+k+'"><div class="acc-row"><h3 class="acc-h"><button type="button" class="acc-b" id="ah-'+k+'" aria-expanded="'+open+'" aria-controls="ap-'+k+'"><span class="fi">'+ic(fIc(k),20,"#fff")+'</span><span class="acc-t">'+esc(C.n)+'</span><span class="acc-st">'+sbHtml(fStatus(k))+'</span><span class="chev">'+ic("down",20)+'</span></button></h3><span class="acc-mv"><button type="button" class="ico" data-fmv="'+k+':-1" title="Move Up" aria-label="Move Up: '+esc(C.n)+'">'+ic("up",18)+'</button><button type="button" class="ico" data-fmv="'+k+':1" title="Move Down" aria-label="Move Down: '+esc(C.n)+'">'+ic("down",18)+'</button></span></div><div class="acc-p'+(open?' open':'')+'" id="ap-'+k+'" role="region" aria-labelledby="ah-'+k+'"><div class="acc-in"><div>'+inner+blkUI(k)+'</div></div></div></div>'}
+function orderedFields(){var E=typeof eff==="function"?eff():{},ord=E.fieldOrder||[],ks=Object.keys(CATS).filter(function(k){return k.indexOf("u_")!==0});return ord.filter(function(k){return ks.indexOf(k)>-1}).concat(ks.filter(function(k){return ord.indexOf(k)<0}))}
+function renderCats(){
+$("cat-chips").innerHTML=orderedFields().filter(function(k){return !HID[k]}).map(function(k){return '<button type="button" class="chipbtn" data-cat="'+k+'" aria-pressed="'+(D.cats.indexOf(k)>-1)+'">'+ic(fIc(k),16)+CATS[k].n+'</button>'}).join("");
+if(ACC_OPEN&&D.cats.indexOf(ACC_OPEN)<0)ACC_OPEN=null;
+$("cat-secs").innerHTML=D.cats.map(accHtml).join("");
+D.cats.forEach(function(k){renderCE(k);renderBL(k)});artStat()}
+function setAcc(k){ACC_OPEN=k;[].forEach.call(document.querySelectorAll("[data-acc]"),function(it){var o=it.dataset.acc===k;it.querySelector(".acc-b").setAttribute("aria-expanded",o);it.querySelector(".acc-p").classList.toggle("open",o)})}
+function refAcc(){[].forEach.call(document.querySelectorAll("[data-acc]"),function(it){var s=it.querySelector(".acc-st");if(s)s.innerHTML=sbHtml(fStatus(it.dataset.acc))})}
+document.addEventListener("click",function(e){var b=e.target.closest(".acc-b");if(b){var k=b.closest("[data-acc]").dataset.acc;setAcc(ACC_OPEN===k?null:k);return}
+var m=e.target.closest("[data-fmv]");if(m){var a=m.dataset.fmv.split(":"),i=D.cats.indexOf(a[0]),j=i+(+a[1]);if(j<0||j>=D.cats.length)return;var x=D.cats.splice(i,1)[0];D.cats.splice(j,0,x);save();renderCats();var nb=document.querySelector('[data-fmv="'+m.dataset.fmv+'"]');if(nb)nb.focus()}});
+document.addEventListener("keydown",function(e){var b=e.target.closest&&e.target.closest(".acc-b");if(!b)return;var all=[].slice.call(document.querySelectorAll(".acc-b")),i=all.indexOf(b),n=null;
+if(e.key==="ArrowDown")n=all[(i+1)%all.length];else if(e.key==="ArrowUp")n=all[(i-1+all.length)%all.length];else if(e.key==="Home")n=all[0];else if(e.key==="End")n=all[all.length-1];if(n){e.preventDefault();n.focus()}});
+document.addEventListener("input",function(){setTimeout(refAcc,0)});
+document.addEventListener("change",function(){setTimeout(refAcc,0)});
+function lk(x){return /^(https?:\/\/|www\.)\S+$/i.test(x)?'<a href="'+esc(safeUrl(x))+'" target="_blank" rel="noopener">Link</a>':esc(x)}
+function catCV(){return D.cats.map(function(k){if(k.indexOf("u_")===0&&!(D.blocks[k]||[]).length)return "";var C=CATS[k],dv=D.cd[k]||[],L=D.ce[k]||[],h='<h3>'+C.n+'</h3>';
+h+=C.d.map(function(f,i){return dv[i]?'<div><span class="mute">'+f[0].replace(/ \(.*\)/,"")+':</span> '+esc(dv[i])+'</div>':""}).join("");
+if(PR[k])h+=projCV(k);else if(L.length)h+='<div class="sub">'+C.en+'</div>'+L.map(function(v){var r=v.slice(1).filter(Boolean).map(lk).join(", ");return '<div class="entry"><b>'+esc(v[0])+'</b>'+(r?'<div class="mute">'+r+'</div>':'')+'</div>'}).join("");
+h+=blkCV(k);return h}).join("")}
+document.addEventListener("click",function(e){var c=e.target.closest("[data-cat]");if(c){var k=c.dataset.cat,i=D.cats.indexOf(k);if(i>-1)D.cats.splice(i,1);else{D.cats.push(k);ACC_OPEN=k}save();renderCats();return}
+var a=e.target.closest("[data-addce]");if(a){var k2=a.dataset.addce,els=[].slice.call(document.querySelectorAll('[data-g="ce"][data-k="'+k2+'"]')),v=els.map(function(x){return x.value.trim()});if(!v[0]){toast("Please fill in the title first");return}(D.ce[k2]=D.ce[k2]||[]).push(v);save();els.forEach(function(x){x.value=x.tagName==="SELECT"?x.options[0].value:""});renderCE(k2);toast("Added");return}
+var d=e.target.closest("[data-ce]");if(d){var ck=d.dataset.ce,ci=+d.dataset.i;ask("Remove this entry?","Remove",function(){D.ce[ck].splice(ci,1);save();renderCE(ck)})}});
+document.addEventListener("input",function(e){var t=e.target;if(t.dataset&&t.dataset.g==="cd"){var k=t.dataset.k;(D.cd[k]=D.cd[k]||[])[+t.dataset.i]=t.value;save()}});
+$("clear2").onclick=function(){$("reset").onclick()};
+/* review and gate */
+function dkey(){var p={};for(var k in D.p)if(k!=="consent"&&k!=="reviewed"&&k!=="revKey")p[k]=D.p[k];return JSON.stringify([p,D.skills,D.projects,D.ach,D.cats,D.cd,D.ce,D.mp,D.ap,D.cf,D.blocks])}
+function checks(){var p=D.p,r=[],mp=D.mp.filter(function(m){return m&&(m.t||m.v||m.img)});
+r.push([!!(p.name||"").trim(),"Full name",1]);r.push([!!(p.code||"").trim(),"Student ID",1]);r.push([D.cats.length>0,"At least one portfolio area selected",1]);r.push([!!okImg(p.photo),"Profile photo",0]);
+if(D.cats.indexOf("music")>-1){r.push([mp.length>0,"Music projects added ("+mp.length+" of 5)",0]);var bad=mp.filter(function(m){return !(m.t&&safeUrl(m.v)&&okImg(m.img))}).length;r.push([mp.length>0&&!bad,"Every music project has a title, cover image and performance link",0])}
+if(D.cats.indexOf("art")>-1)for(var i=0;i<5;i++){var q=D.ap[i]||{};r.push([!!((q.t||"").trim()&&safeUrl(q.v)),"Art project "+(i+1)+" ("+PR.art.kind(i)+"): title and link",1])}
+return r}
+function renderReview(){var c=checks(),rd=D.p.reviewed&&D.p.revKey===dkey();$("rev").innerHTML='<h2>Review your data</h2><ul style="margin:0;padding:0;list-style:none">'+c.map(function(x){return '<li class="'+(x[0]?"ok":x[2]?"no":"wn")+'">'+ic(x[0]?"check":x[2]?"x":"dash",16)+' <span>'+(x[0]?"":x[2]?"Required: ":"Recommended: ")+esc(x[1])+'</span></li>'}).join("")+'</ul><p class="mute" style="margin:8px 0 0">Check the preview above carefully. Go back to Edit to fix anything.</p>';$("reviewed").checked=!!rd}
+function gate(){var bad=checks().filter(function(x){return x[2]&&!x[0]})[0];if(bad){toast("Please complete: "+bad[1],1);return false}if(!(D.p.reviewed&&D.p.revKey===dkey())){toast("Please tick: I have reviewed all my information",1);return false}return true}
+$("reviewed").addEventListener("change",function(){D.p.reviewed=this.checked;D.p.revKey=this.checked?dkey():"";save()});
+/* projects: music and art */
+var PR={
+music:{arr:"mp",cnt:5,head:"Music projects (up to 5)",note:"Add up to 5 projects. For each one, add a square cover image, a link to your own performance or recording, and a link to the original song. Set Google Drive links to \u201cAnyone with the link can view\u201d so the examiner can watch and give a score.",up:"Upload cover image",ph:"Cover image",fields:function(){return [["t","Project or Song Title","note","Title"],["v","Student\u2019s Performance/Recording Link","play","Performance"],["o","Original Song Link","link","Original song"]]}},
+art:{arr:"ap",cnt:5,req:1,head:"Art and Projects",note:"All five projects are required. Projects 1 to 3 are video projects: add a link to each video. Projects 4 and 5 are image projects: add a link to the original painting image. Set links to \u201cAnyone with the link can view\u201d so the examiner can open them.",up:"Upload preview image (optional)",ph:"Preview image",kind:function(i){return i<3?"Video":"Image"},fields:function(i){return i<3?[["t","Project title","note","Title"],["v","Video link","play","Video"]]:[["t","Project title","note","Title"],["v","Link to the original painting image","image","Original painting"]]}}
+};
+function pjArr(k){return D[PR[k].arr]}
+function pjf(k,i,f,m){return '<label><span class="lb">'+ic(f[2],16)+f[1]+'</span><input data-g="pj" data-pk="'+k+'" data-pi="'+i+'" data-f="'+f[0]+'" value="'+esc(m[f[0]]||"")+'"></label>'}
+function projUI(k){var C=PR[k],A=pjArr(k),h='<h4 class="subh">'+C.head+'</h4><p class="mute">'+C.note+'</p>'+(C.req?'<p class="stat" id="art-stat"></p>':'')+'<div class="mgrid">';
+for(var i=0;i<C.cnt;i++){var m=A[i]||{},im=okImg(m.img),kd=C.kind?C.kind(i):"";h+='<div class="mp"><div class="row"><b>Project '+(i+1)+'</b>'+(kd?'<span class="badge">'+ic(kd==="Video"?"play":"image",13)+kd+'</span>':'')+'</div>'+(k==="music"?'<div class="cd" id="ps-'+k+'-'+i+'">'+cdInner(im)+'</div>':'<div class="sq" id="ps-'+k+'-'+i+'">'+(im?'<img src="'+im+'" alt="">':C.ph)+'</div>')+'<button class="btn ghost" data-pup="'+k+':'+i+'">'+ic("camera",13)+C.up+'</button> <button class="del" data-prm="'+k+':'+i+'">Remove</button><input type="file" accept="image/*" class="vh" tabindex="-1" id="pf-'+k+'-'+i+'" data-pf="'+k+':'+i+'"><div class="stack">'+C.fields(i).map(function(f){return pjf(k,i,f,m)}).join("")+'</div></div>'}
+return h+'</div>'}
+function artStat(){var el=$("art-stat");if(!el)return;var n=0;for(var i=0;i<5;i++){var m=D.ap[i]||{};if((m.t||"").trim()&&safeUrl(m.v))n++}el.className="stat "+(n===5?"ok":"no");el.textContent=n+" of 5 required projects complete."+(n<5?" All five are needed before you can create, print or send your PDF.":"")}
+function lrow(i,l,raw){var u=safeUrl(raw);return '<div class="lnk">'+ic(i,14,P)+'<span><small>'+l+'</small>'+(u?'<a data-pdf="1" href="'+esc(u)+'" target="_blank" rel="noopener">Link</a>':'<span class="mute">Not provided</span>')+'</span></div>'}
+function pcard(k,i){var C=PR[k],m=pjArr(k)[i]||{},im=okImg(m.img),kd=C.kind?C.kind(i):"";
+var tile=im?'<img src="'+im+'" alt="">':ic(kd==="Image"?"image":kd==="Video"?"play":"note",34,P);
+var h='<div class="pcard">'+(k==="music"?'<div class="cd">'+cdInner(im)+'</div>':'<div class="sq">'+tile+'</div>')+(kd?'<span class="badge">'+ic(kd==="Video"?"play":"image",12,P)+kd+'</span>':'')+'<b>'+(i+1)+'. '+esc(m.t||"Untitled")+'</b>';
+C.fields(i).forEach(function(f){if(f[0]!=="t")h+=lrow(f[2],f[3],m[f[0]])});return h+'</div>'}
+function projCV(k){var A=pjArr(k);
+if(k==="art"){var cs=function(a,b){var s="";for(var i=a;i<b;i++)s+=pcard(k,i);return s};return '<div class="sub">Video projects</div><div class="agrid g3">'+cs(0,3)+'</div><div class="sub">Image projects</div><div class="agrid g2">'+cs(3,5)+'</div>'}
+var Q=[];A.forEach(function(m,i){if(m&&(m.t||m.v||m.o||m.img))Q.push(i)});if(!Q.length)return"";return '<div class="sub">Music projects</div><div class="agrid g3">'+Q.map(function(i){return pcard(k,i)}).join("")+'</div>'}
+function pjShow(k,i){var el=$("ps-"+k+"-"+i),m=pjArr(k)[i]||{},im=okImg(m.img);if(el)el.innerHTML=k==="music"?cdInner(im):(im?'<img src="'+im+'" alt="">':PR[k].ph)}
+document.addEventListener("click",function(e){var u=e.target.closest("[data-pup]");if(u){var a=u.dataset.pup.split(":");$("pf-"+a[0]+"-"+a[1]).click();return}var r=e.target.closest("[data-prm]");if(r){var b=r.dataset.prm.split(":");delete pjArr(b[0])[+b[1]].img;save();pjShow(b[0],+b[1])}});
+document.addEventListener("change",function(e){var t=e.target;if(t.dataset&&t.dataset.pf){var a=t.dataset.pf.split(":"),k=a[0],i=+a[1],f=t.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var im=new Image();im.onload=function(){var c=document.createElement("canvas");c.width=c.height=480;var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,480,480);if(k==="art"){var s=480/Math.max(im.width,im.height),w=im.width*s,hh=im.height*s;x.drawImage(im,(480-w)/2,(480-hh)/2,w,hh)}else{var m=Math.min(im.width,im.height);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,480,480)}pjArr(k)[i].img=c.toDataURL("image/jpeg",0.8);save();pjShow(k,i);toast("Image added")};im.onerror=function(){toast("This file is not a supported image")};im.src=rd.result};rd.readAsDataURL(f);t.value=""}});
+document.addEventListener("input",function(e){var t=e.target;if(t.dataset&&t.dataset.g==="pj"){pjArr(t.dataset.pk)[+t.dataset.pi][t.dataset.f]=t.value;save();artStat()}});
+/* ===== screens, dialog, extra content blocks, CV builder ===== */
+var SCR=["home","edit","view","cv-tpl","cv-edit","cv-view"],MODE="home";
+function show(id){SCR.forEach(function(s){$(s).hidden=(s!==id)});window.scrollTo(0,0);focusMain()}
+function focusMain(){var h=document.querySelector(".screen:not([hidden]) h1");if(h){h.setAttribute("tabindex","-1");try{h.focus({preventScroll:true})}catch(e){}}}
+function focusables(r){return [].filter.call(r.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]):not([type=hidden]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'),function(x){return x.offsetParent!==null})}
+function openModal(o){var trg=document.activeElement,ov=document.createElement("div"),wrap=document.querySelector(".wrap");ov.className="modal";
+ov.innerHTML='<div class="mbox'+(o.cls?' '+o.cls:'')+'" role="dialog" aria-modal="true" aria-labelledby="md-t" tabindex="-1"><div class="mh"><h2 id="md-t">'+esc(o.title)+'</h2><button type="button" class="ico" data-mclose aria-label="Close">'+ic("x",20)+'</button></div><div class="mb">'+o.html+'</div></div>';
+document.body.appendChild(ov);var box=ov.firstChild;wrap.setAttribute("inert","");wrap.setAttribute("aria-hidden","true");
+function close(){document.removeEventListener("keydown",key,true);ov.remove();wrap.removeAttribute("inert");wrap.removeAttribute("aria-hidden");if(trg&&trg.focus&&document.contains(trg))trg.focus();if(o.onClose)o.onClose()}
+function key(e){if(e.key==="Escape"){e.stopPropagation();close();return}if(e.key==="Tab"){var f=focusables(box);if(!f.length){e.preventDefault();return}var a=f[0],z=f[f.length-1],cur=document.activeElement;if(e.shiftKey&&(cur===a||cur===box)){e.preventDefault();z.focus()}else if(!e.shiftKey&&cur===z){e.preventDefault();a.focus()}}}
+document.addEventListener("keydown",key,true);ov.addEventListener("click",function(e){if(e.target===ov||e.target.closest("[data-mclose]"))close()});
+var fo=o.focus?box.querySelector(o.focus):null;(fo||box).focus();return{root:box,close:close}}
+function ask(msg,okLabel,cb){var m=openModal({title:"Please confirm",cls:"small",focus:"#m-no",html:'<p>'+esc(msg)+'</p><div class="acts"><button type="button" class="btn danger" id="m-ok">'+ic("trash",16)+esc(okLabel||"Delete")+'</button><button type="button" class="btn ghost" id="m-no">Cancel</button></div>'});m.root.querySelector("#m-no").onclick=m.close;m.root.querySelector("#m-ok").onclick=function(){m.close();cb()}}
+function fieldErr(inp,id,msg){var s=$(id);if(!s||!inp)return;if(msg){s.textContent=t(msg);s.hidden=false;inp.setAttribute("aria-invalid","true");inp.setAttribute("aria-describedby",id);inp.focus()}else{s.hidden=true;s.textContent="";inp.removeAttribute("aria-invalid")}}
+var ART_CV="<svg aria-hidden=\"true\" focusable=\"false\" viewBox=\"0 0 240 140\" aria-label=\"Illustration of a CV page\"><defs><linearGradient id=\"gcv\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#3b2f9e\"/><stop offset=\"1\" stop-color=\"#0b79c9\"/></linearGradient></defs><rect width=\"240\" height=\"140\" rx=\"14\" fill=\"url(#gcv)\"/><circle cx=\"212\" cy=\"18\" r=\"42\" fill=\"#fff\" opacity=\".08\"/><circle cx=\"26\" cy=\"128\" r=\"48\" fill=\"#fff\" opacity=\".07\"/><g transform=\"rotate(-4 120 70)\"><rect x=\"66\" y=\"12\" width=\"108\" height=\"118\" rx=\"8\" fill=\"#fff\"/><rect x=\"66\" y=\"12\" width=\"108\" height=\"30\" rx=\"8\" fill=\"#e8e4f7\"/><rect x=\"66\" y=\"30\" width=\"108\" height=\"12\" fill=\"#e8e4f7\"/><circle cx=\"86\" cy=\"27\" r=\"10\" fill=\"#5b2d8e\"/><circle cx=\"86\" cy=\"24\" r=\"3.4\" fill=\"#fff\"/><path d=\"M79 34a7 5 0 0 1 14 0z\" fill=\"#fff\"/><rect x=\"102\" y=\"19\" width=\"50\" height=\"6\" rx=\"3\" fill=\"#1d1b3a\"/><rect x=\"102\" y=\"29\" width=\"34\" height=\"4\" rx=\"2\" fill=\"#8a85ad\"/><rect x=\"76\" y=\"50\" width=\"38\" height=\"5\" rx=\"2.5\" fill=\"#5b2d8e\"/><rect x=\"76\" y=\"60\" width=\"88\" height=\"3\" rx=\"1.5\" fill=\"#cfcae6\"/><rect x=\"76\" y=\"67\" width=\"74\" height=\"3\" rx=\"1.5\" fill=\"#cfcae6\"/><rect x=\"76\" y=\"78\" width=\"38\" height=\"5\" rx=\"2.5\" fill=\"#5b2d8e\"/><rect x=\"76\" y=\"88\" width=\"88\" height=\"3\" rx=\"1.5\" fill=\"#cfcae6\"/><rect x=\"76\" y=\"95\" width=\"60\" height=\"3\" rx=\"1.5\" fill=\"#cfcae6\"/><rect x=\"76\" y=\"106\" width=\"30\" height=\"5\" rx=\"2.5\" fill=\"#5b2d8e\"/><rect x=\"76\" y=\"116\" width=\"52\" height=\"5\" rx=\"2.5\" fill=\"#e3e0f0\"/><rect x=\"76\" y=\"116\" width=\"40\" height=\"5\" rx=\"2.5\" fill=\"#0b79c9\"/></g><circle cx=\"182\" cy=\"108\" r=\"15\" fill=\"#f0a43b\"/><path d=\"M174.500 108l5 5 9-10\" stroke=\"#fff\" stroke-width=\"3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",ART_PF="<svg aria-hidden=\"true\" focusable=\"false\" viewBox=\"0 0 240 140\" aria-label=\"Illustration of a portfolio gallery\"><defs><linearGradient id=\"gpf\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f0a43b\"/><stop offset=\".55\" stop-color=\"#db2777\"/><stop offset=\"1\" stop-color=\"#6d28d9\"/></linearGradient><clipPath id=\"cpf\"><rect x=\"26\" y=\"24\" width=\"96\" height=\"70\" rx=\"8\"/></clipPath></defs><rect width=\"240\" height=\"140\" rx=\"14\" fill=\"url(#gpf)\"/><circle cx=\"214\" cy=\"20\" r=\"40\" fill=\"#fff\" opacity=\".09\"/><circle cx=\"20\" cy=\"132\" r=\"46\" fill=\"#fff\" opacity=\".08\"/><rect x=\"26\" y=\"24\" width=\"96\" height=\"70\" rx=\"8\" fill=\"#fff\"/><g clip-path=\"url(#cpf)\"><rect x=\"26\" y=\"24\" width=\"96\" height=\"70\" fill=\"#bfe3ff\"/><circle cx=\"98\" cy=\"44\" r=\"10\" fill=\"#f0a43b\"/><path d=\"M26 94l30-38 22 26 14-16 30 28z\" fill=\"#6d28d9\"/><path d=\"M60 94l24-26 22 26z\" fill=\"#3b2f9e\"/></g><rect x=\"134\" y=\"20\" width=\"62\" height=\"48\" rx=\"8\" fill=\"#fff\" transform=\"rotate(5 165 44)\"/><rect x=\"142\" y=\"29\" width=\"46\" height=\"5\" rx=\"2.5\" fill=\"#db2777\" transform=\"rotate(5 165 44)\"/><rect x=\"142\" y=\"39\" width=\"38\" height=\"3\" rx=\"1.5\" fill=\"#cfcae6\" transform=\"rotate(5 165 44)\"/><rect x=\"142\" y=\"46\" width=\"42\" height=\"3\" rx=\"1.5\" fill=\"#cfcae6\" transform=\"rotate(5 165 44)\"/><circle cx=\"170\" cy=\"100\" r=\"26\" fill=\"#1d1b3a\"/><circle cx=\"170\" cy=\"100\" r=\"18\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\".35\"/><circle cx=\"170\" cy=\"100\" r=\"11\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\".25\"/><path d=\"M152 90a22 22 0 0 1 30-8\" stroke=\"#fff\" stroke-opacity=\".55\" stroke-width=\"3\" fill=\"none\" stroke-linecap=\"round\"/><circle cx=\"170\" cy=\"100\" r=\"5\" fill=\"#fff\"/><path d=\"M62 118l3.200 6.500 7.200 1-5.200 5 1.200 7.100-6.400-3.400-6.400 3.400 1.200-7.100-5.200-5 7.200-1z\" fill=\"#fff\"/><circle cx=\"92\" cy=\"122\" r=\"6\" fill=\"#fff\" opacity=\".85\"/><circle cx=\"108\" cy=\"130\" r=\"4\" fill=\"#fff\" opacity=\".6\"/></svg>";
+function okCard(d){return typeof d==="string"&&d.length<=260000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+\/=]+$/.test(d)?d:""}
+var DEFAULT_CV_ART='<img src="home-create-cv.webp" alt="Create Your CV">',DEFAULT_PF_ART='<img src="home-create-portfolio.webp" alt="Create Your Portfolio">';
+function renderHomeArt(){var c=(typeof eff==="function"?eff().cards:null)||{},a=okCard(c.cv),b=okCard(c.pf);$("art-cv").innerHTML=a?'<img src="'+a+'" alt="">':DEFAULT_CV_ART;$("art-pf").innerHTML=b?'<img src="'+b+'" alt="">':DEFAULT_PF_ART}
+function setLogo(){var l=(typeof eff==="function"?eff().logo:"")||"",s=okCard(l),el=$("brand-logo");if(s){el.src=s;el.hidden=false}else{el.removeAttribute("src");el.hidden=true}}
+function pfStatus(){var p=D.p,any=!!((p.name||"").trim()||(p.code||"").trim()||(p.bio||"").trim()||p.photo||D.cats.length||D.ach.length);if(!any)return"none";
+var ok=(p.name||"").trim()&&(p.code||"").trim()&&(p.bio||"").trim()&&D.cats.length>=1&&D.ach.length>=1&&D.cats.every(function(k){return fStatus(k)==="done"});return ok?"done":"prog"}
+function cvStatus(){if(!hasCv())return"none";var p=CVD.p,L=CVD.L,n=function(k){return (L[k]||[]).length};
+var ok=(p.name||"").trim()&&(p.title||"").trim()&&((p.email||"").trim()||(p.phone||"").trim())&&(p.summary||"").trim()&&n("education")>=1&&n("skills")>=1&&(n("projects")+n("achv")+n("experience")+n("volunteer")+n("certs"))>=1&&!!CVD.tpl;return ok?"done":"prog"}
+var HOMEDEF={cv:{title:"Create Your CV",desc:"Choose a professional template, add your information and download a polished CV for scholarships, education and job applications.",button:"Create Your CV",link:"",enabled:true,order:1},pf:{title:"Create Your Portfolio",desc:"Showcase your field of study, skills, projects, creative work and achievements in a personalized portfolio.",button:"Create Your Portfolio",link:"",enabled:true,order:2}};
+function homeCfg(k){var h=(typeof eff==="function"&&eff().home&&eff().home[k])||{},d=HOMEDEF[k];return{title:h.title||d.title,desc:h.desc||d.desc,button:h.button||d.button,link:h.link||"",enabled:h.enabled!==false,order:+h.order||d.order}}
+function renderHome(){renderHomeArt();var a=homeCfg("cv"),b=homeCfg("pf"),cv=$("card-cv"),pf=$("card-pf");cv.hidden=!a.enabled;pf.hidden=!b.enabled;cv.style.order=a.order;pf.style.order=b.order;cv.querySelector("h2 button").textContent=a.title;pf.querySelector("h2 button").textContent=b.title;cv.querySelector("p.d").textContent=a.desc;pf.querySelector("p.d").textContent=b.desc;$("go-cv").textContent=a.button;$("go-pf").textContent=b.button;$("pf-badge").innerHTML=sbHtml(pfStatus());$("cv-badge").innerHTML=sbHtml(cvStatus())}
+function launchCard(k,mode){var u=safeUrl(homeCfg(k).link);if(u){window.open(u,"_blank","noopener");return}go(mode)}
+function go(m){MODE=m;$("home-btn").hidden=(m==="home");
+if(m==="home"){renderHome();show("home")}else if(m==="cv"){renderTplPicker();show("cv-tpl");fitThumbs()}else show("edit")}
+$("go-cv").onclick=function(){launchCard("cv","cv")};$("go-pf").onclick=function(){launchCard("pf","portfolio")};$("home-btn").onclick=function(){go("home")};
+$("card-cv").addEventListener("click",function(e){if(!e.target.closest("button"))launchCard("cv","cv")});$("card-pf").addEventListener("click",function(e){if(!e.target.closest("button"))launchCard("pf","portfolio")});
+$("go-preview").onclick=function(){$("t-view").click()};$("back-edit").onclick=function(){tab(false)};
+$("lang").onchange=function(){setLang(this.value)};
+function reRender(){if(!$("home").hidden)renderHome();if(!$("view").hidden){renderCV();renderReview()}if(!$("cv-tpl").hidden){renderTplPicker();fitThumbs()}if(!$("cv-view").hidden){renderCVX();fitCV()}if(!$("cv-edit").hidden)renderCVEdit();if(!$("edit").hidden){renderCats();renderLists()}progress();trTree(document.body)}
+function cdInner(im){return (im?'<img src="'+im+'" alt="">':'<span class="cdph">'+ic("note",30,"#cbbdf0")+'</span>')+'<i class="rg r1"></i><i class="rg r2"></i><i class="sheen"></i><b class="hole"></b>'}
+/* extra content blocks (text, link, image) for every field */
+var BI={text:["text","Text"],link:["link","Link"],image:["image","Image"]};
+function blkUI(k){return '<div class="blk"><h4 class="subh">Add more content <span class="mute">(optional)</span></h4><p class="mute">Add any mix of text, links and images to this field.</p><div class="acts"><button class="btn ghost" data-bk="text:'+k+'">'+ic("text",14)+'Add Text</button><button class="btn ghost" data-bk="link:'+k+'">'+ic("link",14)+'Add Link</button><button class="btn ghost" data-bk="image:'+k+'">'+ic("image",14)+'Add Image</button></div><div id="bl-'+k+'"></div></div>'}
+function bf(k,i,f,label,ph,area){var a='data-g="bl" data-k="'+k+'" data-i="'+i+'" data-f="'+f+'"',v=((D.blocks[k]||[])[i]||{})[f]||"";return '<label>'+label+(area?'<textarea '+a+' placeholder="'+ph+'">'+esc(v)+'</textarea>':'<input '+a+' placeholder="'+ph+'" value="'+esc(v)+'">')+'</label>'}
+function renderBL(k){var el=$("bl-"+k);if(!el)return;var L=D.blocks[k]||[];
+el.innerHTML=L.length?L.map(function(b,i){var body;
+if(b.t==="text")body=bf(k,i,"title","Title (optional)","e.g. My approach")+bf(k,i,"text","Text","Write your description or reflection here",1);
+else if(b.t==="link")body=bf(k,i,"title","Link title","e.g. My project website")+bf(k,i,"url","Link address","https://");
+else{var im=okImg(b.img);body='<div class="bimg">'+(im?'<img src="'+im+'" alt="">':'No image yet')+'</div><div><button class="btn ghost" data-bup="'+k+':'+i+'">'+ic("camera",13)+(im?'Replace image':'Upload image')+'</button></div><input type="file" accept="image/*" class="vh" tabindex="-1" id="bf-'+k+'-'+i+'" data-bf="'+k+':'+i+'">'+bf(k,i,"cap","Caption (optional)","What does this image show?")}
+return '<div class="bi"><div class="row"><span class="badge">'+ic(BI[b.t][0],13)+BI[b.t][1]+'</span><button class="del" data-bdel="'+k+':'+i+'">Remove</button></div><div class="stack">'+body+'</div></div>'}).join(""):'<p class="empty">No extra content yet. Use the buttons above if you want to add some.</p>'}
+function blkCV(k){var h="";(D.blocks[k]||[]).forEach(function(b){
+if(b.t==="text"&&((b.text||"").trim()||(b.title||"").trim()))h+='<div class="blkc txt">'+(b.title?'<b>'+esc(b.title)+'</b>':'')+'<div>'+esc(b.text||"").replace(/\n/g,"<br>")+'</div></div>';
+else if(b.t==="link"){var u=safeUrl(b.url);if(u)h+='<div class="blkc lkb">'+ic("link",16,P)+'<span>'+esc(b.title||"Related link")+'</span>'+lkx(u,"Link")+'</div>'}
+else if(b.t==="image"){var im=okImg(b.img);if(im)h+='<figure class="blkc imgb"><img src="'+im+'" alt="">'+(b.cap?'<figcaption>'+esc(b.cap)+'</figcaption>':'')+'</figure>'}});return h}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-bk]");
+if(b){var a=b.dataset.bk.split(":"),k=a[1];(D.blocks[k]=D.blocks[k]||[]).push({t:a[0]});save();renderBL(k);var els=document.querySelectorAll('#bl-'+k+' .bi:last-child input, #bl-'+k+' .bi:last-child textarea');if(els.length)els[0].focus();return}
+b=e.target.closest("[data-bdel]");if(b){var d=b.dataset.bdel.split(":");ask("Remove this content item?","Remove",function(){D.blocks[d[0]].splice(+d[1],1);save();renderBL(d[0])});return}
+b=e.target.closest("[data-bup]");if(b){var u=b.dataset.bup.split(":");$("bf-"+u[0]+"-"+u[1]).click();return}
+b=e.target.closest("[data-ufx]");if(b){var id=b.dataset.ufx;ask("Remove this field and all of its content?","Remove field",function(){D.cf=D.cf.filter(function(f){return f.id!==id});D.cats=D.cats.filter(function(x){return x!==id});delete D.blocks[id];delete D.cd[id];delete D.ce[id];syncUF();save();renderCats()})}});
+document.addEventListener("change",function(e){var t=e.target;if(t.dataset&&t.dataset.bf){var a=t.dataset.bf.split(":"),k=a[0],i=+a[1],f=t.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);D.blocks[k][i].img=c.toDataURL("image/jpeg",0.8);save();renderBL(k);toast("Image added")};im.onerror=function(){toast("This file is not a supported image")};im.src=rd.result};rd.readAsDataURL(f);t.value=""}});
+document.addEventListener("input",function(e){var t=e.target;
+if(t.dataset&&t.dataset.g==="bl"){D.blocks[t.dataset.k][+t.dataset.i][t.dataset.f]=t.value;save()}
+if(t.dataset&&t.dataset.ufn){var id=t.dataset.ufn,f=D.cf.filter(function(x){return x.id===id})[0];if(f){f.name=cl(t.value,40)||"Untitled field";CATS[id].n=f.name;save()}}});
+$("uf-add").onclick=function(){var n=cl($("uf-name").value,40);if(!n){fieldErr($("uf-name"),"uf-err","Please type a name for the field");return}fieldErr($("uf-name"),"uf-err","");if(D.cf.length>=12){toast("You can add up to 12 fields");return}var id="u_"+Date.now().toString(36);D.cf.push({id:id,name:n});syncUF();D.cats.push(id);ACC_OPEN=id;save();$("uf-name").value="";renderCats();toast("Field added");var s=document.querySelector('[data-ufn="'+id+'"]');if(s){s.focus();s.select()}};
+$("uf-name").addEventListener("input",function(){fieldErr(this,"uf-err","")});
+
+/* ----- CV builder ----- */
+var CVKEY="eba-cv-v1",CVD={p:{},inc:{},order:[],L:{}},CVE={k:null,i:-1};
+try{var cvs0=localStorage.getItem(CVKEY);if(cvs0){var cvo=JSON.parse(cvs0);if(cvo&&cvo.p)CVD=cvo}}catch(e){}
+var OLDORD=["education","experience","skills","languages","certs","achv","projects","volunteer","refs"],NEWORD=["summary","education","skills","projects","achv","certs","volunteer","experience","languages","refs"];
+var LV4={Beginner:1,Intermediate:2,Advanced:3,Expert:4,Basic:1,Conversational:2,Fluent:3,Native:4};
+var CVS={
+summary:{n:"Professional Summary",ic:"user",g:"Mention your education, your strengths and what you want to achieve."},
+education:{n:"Education",ic:"cap",f:[["Degree or program"],["School or university"],["City or country"],["Start year"],["End year (or expected)"],["Details (optional)","area"]],map:{t:0,o:1,l:2,s:3,e:4,d:5}},
+skills:{n:"Skills",ic:"star",chip:1,f:[["Skill"],["Level",["Beginner","Intermediate","Advanced","Expert"]]]},
+projects:{n:"Projects",ic:"grid",g:"Explain what you built or created, your role and the result.",f:[["Project"],["Your role or tools"],["Date"],["Description","area"],["Link (optional)"]],map:{t:0,o:1,dt:2,d:3,u:4}},
+achv:{n:"Achievements",ic:"trophy",g:"Include the result, rank or recognition you received.",f:[["Title"],["Organizer"],["Date"],["Description (optional)","area"],["Link (optional)"]],map:{t:0,o:1,dt:2,d:3,u:4}},
+certs:{n:"Certificates",ic:"medal",f:[["Certificate"],["Issued by"],["Date"],["Link (optional)"]],map:{t:0,o:1,dt:2,u:3}},
+volunteer:{n:"Volunteer Experience",ic:"heart",g:"Describe what you did and the difference it made.",f:[["Role"],["Organization"],["Start"],["End"],["What you did","area"]],map:{t:0,o:1,s:2,e:3,d:4}},
+experience:{n:"Work Experience",ic:"briefcase",g:"Focus on achievements and results, not only responsibilities.",f:[["Job title"],["Employer or organization"],["City or country"],["Start"],["End (or Present)"],["Responsibilities and results","area"]],map:{t:0,o:1,l:2,s:3,e:4,d:5}},
+languages:{n:"Languages",ic:"globe",chip:1,f:[["Language"],["Level",["Basic","Conversational","Fluent","Native"]]]},
+refs:{n:"References (optional)",ic:"user",f:[["Name"],["Position and organization"],["Email or phone"]],map:{t:0,o:1,d:2}}
+};
+CVD.p=CVD.p||{};CVD.inc=CVD.inc||{};CVD.L=CVD.L||{};
+(function(){var o=(CVD.order||[]).filter(function(k){return CVS[k]});if(!o.length||JSON.stringify(o)===JSON.stringify(OLDORD))o=NEWORD.slice();else if(o.indexOf("summary")<0)o.unshift("summary");
+Object.keys(CVS).forEach(function(k){if(o.indexOf(k)<0)o.push(k);if(CVD.inc[k]===undefined)CVD.inc[k]=(k!=="refs");if(!CVD.L[k])CVD.L[k]=[]});CVD.order=o})();
+var CVP=[["name","Full name","user"],["title","Professional Title","briefcase","e.g. High School Student, Scholarship Applicant, Junior Web Developer"],["city","City and country","pin"],["phone","Phone number","phone"],["email","Email address","mail"],["linkedin","LinkedIn","linkedin"],["github","GitHub","github"],["site","Website or portfolio link","link"]];
+function cvSave(){try{localStorage.setItem(CVKEY,JSON.stringify(CVD));return true}catch(e){toast("Could not save: the browser storage is full or blocked. Remove some images or free up space.",1);return false}}
+function cvInp(f){return '<label><span class="lb">'+ic(f[2],18)+f[1]+'</span><input data-cvp="'+f[0]+'"'+(f[3]?' placeholder="'+f[3]+'"':'')+' value="'+esc(CVD.p[f[0]]||"")+'"></label>'}
+function cvSecHtml(k){var S=CVS[k],L=CVD.L[k]||[],ed=(CVE.k===k&&CVE.i>-1),v=ed?L[CVE.i]:[],nm=S.n.replace(" (optional)","");
+var h='<div class="sech"><h2>'+ic(S.ic,20)+S.n+'</h2><div class="secbtn"><label class="chk inl"><input type="checkbox" data-cvinc="'+k+'"'+(CVD.inc[k]?' checked':'')+'><span>Include</span></label><button type="button" class="ico" data-cvmv="'+k+':-1" title="Move section up" aria-label="Move section up: '+esc(nm)+'">'+ic("up",18)+'</button><button type="button" class="ico" data-cvmv="'+k+':1" title="Move section down" aria-label="Move section down: '+esc(nm)+'">'+ic("down",18)+'</button></div></div>';
+if(S.g)h+='<p class="gd">'+S.g+'</p>';
+if(k==="summary")return h+'<label class="full"><span class="lb">'+ic("user",18)+'Professional Summary</span><textarea data-cvp="summary" placeholder="Write two or three sentences about your education, strengths, interests and future goals.">'+esc(CVD.p.summary||"")+'</textarea></label>';
+if(k==="refs"){h+='<label class="chk"><input type="checkbox" data-cvrefs'+(CVD.refsOnReq?' checked':'')+'><span>References available upon request</span></label>';if(CVD.refsOnReq)return h+'<p class="gd">This statement will appear in your CV. You do not need to enter anyone\u2019s name or contact details.</p>'}
+h+='<div class="grid">'+S.f.map(function(f,i){var val=v[i]||"",a='data-cvf="'+i+'" data-cvk="'+k+'"',c=f[1]==="area"?'<textarea '+a+'>'+esc(val)+'</textarea>':Array.isArray(f[1])?'<select '+a+'>'+[""].concat(f[1]).map(function(x){return '<option value="'+x+'"'+(x===val?' selected':'')+'>'+(x||"Select...")+'</option>'}).join("")+'</select>':'<input '+a+' value="'+esc(val)+'">';return '<label'+(f[1]==="area"?' class="full"':'')+'>'+f[0]+c+'</label>'}).join("")+'</div>';
+h+='<div class="acts"><button type="button" class="btn" data-cvadd="'+k+'">'+ic(ed?"check":"plus",16)+(ed?'Save changes':'Add')+'</button>'+(ed?'<button type="button" class="btn ghost" data-cvcancel="'+k+'">Cancel edit</button>':'')+'</div>';
+h+=L.length?L.map(function(it,i){var t1=S.chip?esc(it[0])+(it[1]?' <span class="chip">'+esc(it[1])+'</span>':''):'<b>'+esc(it[0])+'</b>',sub=S.chip||!it[1]?'':esc(it[1]);return '<div class="item"><div class="row"><span>'+t1+(sub?'<div class="mute">'+sub+'</div>':'')+'</span><span class="nw"><button type="button" class="del ed" data-cved="'+k+':'+i+'">Edit</button><button type="button" class="del" data-cvdel="'+k+':'+i+'">'+ic("trash",16)+'Remove</button></span></div></div>'}).join(""):'<p class="empty">Nothing added yet. This section is optional.</p>';
+return h}
+function renderCVEdit(){var ph=okImg(CVD.p.photo);
+var h='<h1 class="ptitle">Create Your CV</h1><div class="progress"><div class="tplrow"><span class="badge">Template: '+esc(tplOf(CVD.tpl).n)+'</span><button type="button" class="btn ghost" id="cv-chg">Change template</button></div><p class="mute" style="margin:6px 0 0">Your details are placed in the chosen template automatically. Optional sections can be turned off or moved. Your CV is saved on this device.</p></div>';
+h+='<section class="box" aria-labelledby="h-cvp"><h2 id="h-cvp">Personal Information</h2><div class="up"><div class="pv" id="cv-pv">'+(ph?'<img src="'+ph+'" alt="">':'No photo')+'</div><div><button type="button" class="btn" id="cv-up">'+ic("camera",16)+'Upload photo</button><input type="file" accept="image/png,image/jpeg,image/webp" id="cv-in-photo" class="vh" tabindex="-1" aria-label="Upload photo"><div><button type="button" class="del" id="cv-rm">'+ic("trash",16)+'Remove photo</button></div></div></div><div class="grid">'+cvInp(CVP[0])+cvInp(CVP[1])+'</div><p><button type="button" class="btn ghost" id="cv-fill">'+ic("copy",16)+'Fill from my portfolio details</button></p></section>';
+h+='<section class="box" aria-labelledby="h-cvc"><h2 id="h-cvc">Contact Information</h2><div class="grid">'+CVP.slice(2).map(function(f){return cvInp(f)}).join("")+'</div></section>';
+h+=CVD.order.map(function(k){return '<section class="box cvsec" id="cvs-'+k+'">'+cvSecHtml(k)+'</section>'}).join("");
+h+='<div class="previewbar"><button type="button" class="btn big" id="cv-go">'+ic("eye",20)+'Preview your CV</button><p class="mute">Check your CV before saving it as a PDF.</p></div><p><button type="button" class="btn ghost" id="cv-clear">'+ic("trash",16)+'Clear my CV</button></p>';
+$("cv-edit").innerHTML=h}
+function cvEnt(S,v){var m=S.map||{},g=function(k){return m[k]!=null?(v[m[k]]||"").trim():""};
+var og=[g("o"),g("l")].filter(Boolean).map(esc).join(", "),dt=m.dt!=null?g("dt"):[g("s"),g("e")].filter(Boolean).join(" \u2013 "),u=safeUrl(g("u")),dd=g("d");
+return '<div class="e"><div class="t"><span dir="auto">'+esc(g("t"))+'</span>'+(dt?'<span class="dt">'+esc(dt)+'</span>':'')+'</div>'+(og?'<div class="og" dir="auto">'+og+'</div>':'')+(dd?'<p dir="auto">'+esc(dd).replace(/\n/g,"<br>")+'</p>':'')+(u?'<div class="lk">'+lkx(u,"Link")+'</div>':'')+'</div>'}
+var TPL=[
+{id:"classic",cat:"academic",n:"Classic Academic",f:"Best for Scholarships",d:"Traditional and trusted. Navy and gold.",L:"classic",hs:"line",x:{sk:"chips"},v:{ac:"#1f3a5f",ac2:"#c9a227"}},
+{id:"scholar",cat:"academic",n:"Scholar",f:"Best for Scholarships",d:"Minimal and elegant with centered headings.",L:"minimal",hs:"center",x:{sk:"dots"},v:{ac:"#111827",ac2:"#6b7280"}},
+{id:"timeline",cat:"academic",n:"Timeline",f:"Best for Students",d:"Shows your journey step by step.",L:"timeline",hs:"bar",x:{sk:"plain"},v:{ac:"#0f766e",ac2:"#14b8a6",bf:"Georgia,'Iowan Old Style',serif"}},
+{id:"modern",cat:"professional",n:"Modern Blue",f:"Best for Internships",d:"Bold sidebar with photo, contacts and skills.",L:"sideL",hs:"bar",x:{sk:"bars",ps:"sq"},v:{ac:"#1d4ed8",ac2:"#0ea5e9",sb:"#14307a",sbt:"#ffffff",sdh:"#7dd3fc"}},
+{id:"slate",cat:"professional",n:"Executive Slate",f:"Best for Internships",d:"Dark banner with a serious, focused look.",L:"banner",hs:"bar",x:{sk:"bars",ps:"sq"},v:{ac:"#0f172a",ac2:"#475569"}},
+{id:"compact",cat:"professional",n:"Compact Two-Column",f:"Best for Long CVs",d:"Fits a lot of information neatly.",L:"split",hs:"line",x:{sk:"dots",dense:1},v:{ac:"#4338ca",ac2:"#6366f1"}},
+{id:"midnight",cat:"professional",n:"Midnight",f:"Best for Internships",d:"Dark sidebar with strong contrast.",L:"sideL",hs:"line",x:{sk:"bars"},v:{ac:"#0369a1",ac2:"#0ea5e9",sb:"#0f172a",sbt:"#e2e8f0",sdh:"#38bdf8"}},
+{id:"violet",cat:"creative",n:"Creative Violet",f:"Best for Creative Fields",d:"Colourful banner with rounded headings.",L:"banner",hs:"pill",x:{sk:"chips"},v:{ac:"#6d28d9",ac2:"#db2777"}},
+{id:"rose",cat:"creative",n:"Elegant Rose",f:"Best for Creative Fields",d:"Soft and refined with a light sidebar.",L:"sideL",hs:"center",x:{sk:"plain"},v:{ac:"#be185d",ac2:"#f472b6",sb:"#fdf2f8",sbt:"#4a1d34",sdh:"#be185d"}},
+{id:"sunrise",cat:"creative",n:"Sunrise",f:"Best for Students",d:"Warm colours and soft cards.",L:"boxed",hs:"pill",x:{sk:"chips"},v:{ac:"#c2410c",ac2:"#f59e0b",tint:"#fff7ed"}},
+{id:"ocean",cat:"creative",n:"Ocean Cards",f:"Best for Students",d:"Clean cards in cool tones.",L:"boxed",hs:"bar",x:{sk:"dots",ps:"sq"},v:{ac:"#0369a1",ac2:"#06b6d4",tint:"#f0f9ff"}},
+{id:"forest",cat:"creative",n:"Fresh Green",f:"Best for Students",d:"Calm green with a sidebar on the right.",L:"sideR",hs:"line",x:{sk:"bars"},v:{ac:"#15803d",ac2:"#65a30d",sb:"#e8f5ec",sbt:"#14351f",sdh:"#15803d"}}];
+var TCATS=[["academic","Academic Templates","Traditional layouts for scholarships and school applications."],["professional","Professional Templates","Structured layouts for internships and first jobs."],["creative","Creative Templates","Colourful layouts for art, design and creative fields."]];
+function tplOf(id){for(var i=0;i<TPL.length;i++)if(TPL[i].id===id)return TPL[i];return TPL[0]}
+var SPH=null;function samplePhoto(){if(SPH!==null)return SPH;try{var c=document.createElement("canvas");c.width=c.height=160;var x=c.getContext("2d"),g=x.createLinearGradient(0,0,160,160);g.addColorStop(0,"#6d28d9");g.addColorStop(1,"#0ea5e9");x.fillStyle=g;x.fillRect(0,0,160,160);x.fillStyle="#fff";x.beginPath();x.arc(80,62,28,0,6.3);x.fill();x.beginPath();x.arc(80,152,54,3.14,6.28);x.fill();SPH=c.toDataURL("image/jpeg",0.8)}catch(e){SPH=""}return SPH}
+var SAMPLE={p:{name:"Rohullah Mohsini",title:"High School Student and Scholarship Applicant",city:"Kabul, Afghanistan",phone:"+93 700 000 000",email:"rohullah@example.org",linkedin:"linkedin.com/in/rohullah-mohsini",github:"github.com/rohullah-mohsini",site:"https://rohullah.example.org",summary:"Motivated 12th-grade student with excellent results in science and mathematics, a passion for teaching, and the goal of studying engineering at university."},
+inc:{summary:true,education:true,skills:true,projects:true,achv:true,certs:true,volunteer:true,experience:true,languages:true,refs:false},order:NEWORD.slice(),
+L:{education:[["High School Diploma","Example High School","Kabul","2021","2025","Top 5% of the class. Focus on mathematics, physics and English."]],skills:[["Problem solving","Advanced"],["Python","Intermediate"],["Public speaking","Intermediate"],["Teamwork","Advanced"]],projects:[["School Science Fair Robot","Team leader","2025","Built a line-following robot with a team of four.",""]],achv:[["Regional Math Olympiad, 2nd place","Education Department","2024","Ranked second among 300 students.",""]],certs:[["Python for Beginners","Online Academy","2024",""]],volunteer:[["Reading Club Mentor","Local Library","2023","Present","Run weekly reading sessions for younger children."]],experience:[["Teaching Assistant","Community Learning Center","Kabul","2024","Present","Support 20 students weekly with mathematics and study skills."]],languages:[["Dari","Native"],["Pashto","Fluent"],["English","Fluent"]],refs:[]}};
+function hasCv(){return !!((CVD.p.name||"").trim()||(CVD.p.summary||"").trim()||Object.keys(CVD.L).some(function(k){return (CVD.L[k]||[]).length}))}
+function ctItems(p,col){var tel=(p.phone||"").replace(/[^\d+]/g,""),em=(p.email||"").trim(),a="";
+function add(i,l,h){if(h)a+='<span class="ci">'+ic(i,14,col)+(l?'<small>'+l+':</small>':'')+h+'</span>'}
+add("pin","",esc(p.city||""));add("phone","",p.phone?(tel?lkx("tel:"+tel,p.phone.trim()):esc(p.phone)):"");add("mail","",em?lkx("mailto:"+em,em):"");add("linkedin","LinkedIn",L(p.linkedin));add("github","GitHub",L(p.github));add("link","Website",L(p.site));return a}
+function cvHas(d,k){if(!d.inc[k])return false;if(k==="summary")return !!(d.p.summary||"").trim();if(k==="refs")return !!d.refsOnReq||(d.L.refs||[]).length>0;return (d.L[k]||[]).length>0}
+function skillsHtml(Ls,T){var m=(T.x&&T.x.sk)||"chips";
+if(m==="bars")return Ls.map(function(v){var n=LV4[v[1]]||0;return '<div class="bar2"><span dir="auto">'+esc(v[0])+'</span><i><b style="width:'+(n?n*25:50)+'%"></b></i></div>'}).join("");
+if(m==="dots")return Ls.map(function(v){var n=LV4[v[1]]||0,d="";for(var i=1;i<=4;i++)d+='<u'+(i<=n?' class="on"':'')+'></u>';return '<div class="dtr"><span dir="auto">'+esc(v[0])+'</span><em>'+d+'</em></div>'}).join("");
+if(m==="plain")return Ls.map(function(v){return '<div class="pln" dir="auto">'+esc(v[0])+(v[1]?' <small>'+esc(v[1])+'</small>':'')+'</div>'}).join("");
+return '<div class="chs">'+Ls.map(function(v){return '<span dir="auto">'+esc(v[0])+(v[1]?'<small>'+esc(v[1])+'</small>':'')+'</span>'}).join("")+'</div>'}
+function cvSecH(d,k,col,T){if(!cvHas(d,k))return"";var S=CVS[k],Ls=d.L[k]||[],h='<section class="sec"><h3 class="sh">'+ic(S.ic,16,col)+S.n.replace(" (optional)","")+'</h3>';
+if(k==="summary")h+='<div class="ab" dir="auto">'+esc(d.p.summary).replace(/\n/g,"<br>")+'</div>';
+else if(k==="refs"&&d.refsOnReq)h+='<div class="ab">References available upon request</div>';
+else if(S.chip)h+=skillsHtml(Ls,T);else h+=Ls.map(function(v){return cvEnt(S,v)}).join("");
+return h+'</section>'}
+function cvDoc(d,id){var T=tplOf(id),v=T.v,p=d.p,ph=okImg(p.photo),isSide=T.L==="sideL"||T.L==="sideR",hc=T.hs==="pill"?"#fff":v.ac,sc=v.sdh||v.sbt||"#fff",x=T.x||{};
+var style='--ac:'+v.ac+';--ac2:'+v.ac2+(v.sb?';--sb:'+v.sb+';--sbt:'+v.sbt:'')+(v.sdh?';--sdh:'+v.sdh:'')+(v.tint?';--tint:'+v.tint:'')+(v.hd?';--hd:'+v.hd:'')+(v.bf?';--bf:'+v.bf:'');
+var ord=d.order.filter(function(k){return cvHas(d,k)});
+var photo=ph?'<img class="ph'+(x.ps==="sq"?' sq':'')+'" src="'+ph+'" alt="">':"",nm='<h2 class="nm" dir="auto">'+esc(p.name||"Your name")+'</h2>'+(p.title?'<p class="ro" dir="auto">'+esc(p.title)+'</p>':""),foot='<div class="ft">Pathfolio \u00b7 Prepared on '+fmtDate()+'</div>';
+function S(keys){return keys.map(function(k){return cvSecH(d,k,hc,T)}).join("")}
+var inner;
+if(isSide){var sk=["skills","languages","certs","refs"],sd='<div class="sd">'+photo+'<div class="ct">'+ctItems(p,v.sbt)+'</div>'+ord.filter(function(k){return sk.indexOf(k)>-1}).map(function(k){return cvSecH(d,k,sc,T)}).join("")+'</div>',mn='<div class="mn">'+nm+S(ord.filter(function(k){return sk.indexOf(k)<0}))+foot+'</div>';inner=T.L==="sideL"?sd+mn:mn+sd}
+else if(T.L==="banner")inner='<div class="bn">'+photo+'<div class="hdt">'+nm+'<div class="ct">'+ctItems(p,"#fff")+'</div></div></div><div class="bd">'+S(ord)+foot+'</div>';
+else if(T.L==="minimal")inner='<div class="hd">'+photo+'<div class="hdt">'+nm+'<div class="ct">'+ctItems(p,v.ac)+'</div></div></div><div class="bd">'+S(ord)+foot+'</div>';
+else if(T.L==="split"){var lf=["summary","education","projects","volunteer","experience"];inner='<div class="hd">'+photo+'<div class="hdt">'+nm+'<div class="ct">'+ctItems(p,v.ac)+'</div></div></div><div class="rule"></div><div class="bd"><div class="cols"><div>'+S(ord.filter(function(k){return lf.indexOf(k)>-1}))+'</div><div>'+S(ord.filter(function(k){return lf.indexOf(k)<0}))+'</div></div>'+foot+'</div>'}
+else inner='<div class="hd">'+photo+'<div class="hdt">'+nm+'<div class="ct">'+ctItems(p,v.ac)+'</div></div></div>'+(T.L==="boxed"?"":'<div class="rule"></div>')+'<div class="bd">'+S(ord)+foot+'</div>';
+return '<div class="cvd L-'+T.L+' hs-'+T.hs+(x.dense?' dense':'')+'" dir="'+docDir()+'" style="'+style+'">'+inner+'</div>'}
+function thumbData(){if(hasCv())return CVD;SAMPLE.p.photo=samplePhoto();return SAMPLE}
+function renderCVX(){$("cvx").innerHTML=cvDoc(CVD,CVD.tpl||"classic")}
+function fitCV(){var w=$("cv-fit"),x=$("cvx"),s=Math.min(1,w.clientWidth/794);x.style.width="794px";x.style.transformOrigin="top left";x.style.transform=s<1?"scale("+s+")":"none";w.style.height=Math.ceil(x.offsetHeight*s)+"px"}
+function fitThumbs(){[].forEach.call(document.querySelectorAll("#cv-tpl .tthumb"),function(el){var f=el.firstChild;f.style.transform="scale("+(el.clientWidth/794)+")"})}
+function renderTplPicker(){var d=thumbData(),cur=CVD.tpl||"",h='<h1 class="ptitle">Choose your CV template</h1><p class="mute">Pick the look you like. You can change it at any time and everything you typed stays exactly as it is.'+(hasCv()?'':' The previews show sample content until you add your own.')+'</p>'+(CVD.tpl?'<p><button type="button" class="btn" id="tpl-cont">'+ic("check",16)+'Continue with '+esc(tplOf(CVD.tpl).n)+'</button></p>':'');
+TCATS.forEach(function(c){h+='<h2 class="tcat">'+c[1]+'</h2><p class="mute">'+c[2]+'</p><div class="tgrid">'+TPL.filter(function(T){return T.cat===c[0]}).map(function(T){var sel=T.id===cur;return '<article class="tcard'+(sel?' sel':'')+'"><div class="tthumb pvbox" aria-hidden="true"><div class="tin">'+cvDoc(d,T.id)+'</div></div><b>'+esc(T.n)+'</b><span class="tfor">'+T.f+'</span><span class="mute">'+T.d+'</span>'+(sel?'<span class="tsel">'+ic("check",18)+'Selected</span>':'')+'<div class="acts"><button type="button" class="btn ghost" data-tpv="'+T.id+'" aria-label="Preview: '+esc(T.n)+'">'+ic("eye",16)+'Preview</button><button type="button" class="btn" data-tpl="'+T.id+'" aria-pressed="'+sel+'" aria-label="Use This Template: '+esc(T.n)+'">Use This Template</button></div></article>'}).join("")+'</div>'});
+$("cv-tpl").innerHTML=h}
+function chooseTpl(id){CVD.tpl=id;cvSave();renderCVEdit();show("cv-edit");toast("Template: "+tplOf(id).n)}
+function openTplPreview(id){var T=tplOf(id),m=openModal({title:T.n,cls:"wide",focus:"#pv-use",html:'<p class="mute"><span>'+T.f+'</span>. <span>'+T.d+'</span></p><div class="pvbox" id="pv-big" style="max-height:62vh;overflow:auto"><div class="tin" style="position:relative">'+cvDoc(thumbData(),id)+'</div></div><div class="acts"><button type="button" class="btn" id="pv-use">'+ic("check",16)+'Use This Template</button><button type="button" class="btn ghost" data-mclose>Close</button></div>'});
+var box=m.root.querySelector("#pv-big"),inn=box.firstChild,s=Math.min(1,box.clientWidth/794);inn.style.width="794px";inn.style.transformOrigin="top left";inn.style.transform="scale("+s+")";inn.style.marginBottom=(-(1-s)*inn.offsetHeight)+"px";
+m.root.querySelector("#pv-use").onclick=function(){m.close();chooseTpl(id)}}
+document.addEventListener("click",function(e){var b=e.target.closest("[data-tpl]");if(b){chooseTpl(b.dataset.tpl);return}
+b=e.target.closest("[data-tpv]");if(b){openTplPreview(b.dataset.tpv);return}
+if(e.target.closest("#tpl-cont")){renderCVEdit();show("cv-edit");return}
+if(e.target.closest("#cv-chg")||e.target.closest("#cv-chg2")){renderTplPicker();show("cv-tpl");fitThumbs()}});
+window.addEventListener("resize",function(){if(!$("cv-tpl").hidden)fitThumbs();if(!$("cv-view").hidden)fitCV()});
+document.addEventListener("click",function(e){var t=e.target,b,k;
+if(b=t.closest("[data-cvadd]")){k=b.dataset.cvadd;var v=[].map.call(document.querySelectorAll('#cvs-'+k+' [data-cvf]'),function(x){return x.value.trim()});if(!v[0]){toast("Please fill in the first field",1);var f0=document.querySelector('#cvs-'+k+' [data-cvf="0"]');if(f0)f0.focus();return}
+if(CVE.k===k&&CVE.i>-1){CVD.L[k][CVE.i]=v;toast("Updated")}else{CVD.L[k].push(v);toast("Added")}CVE={k:null,i:-1};cvSave();$("cvs-"+k).innerHTML=cvSecHtml(k);return}
+if(b=t.closest("[data-cvcancel]")){k=b.dataset.cvcancel;CVE={k:null,i:-1};$("cvs-"+k).innerHTML=cvSecHtml(k);return}
+if(b=t.closest("[data-cved]")){var a=b.dataset.cved.split(":"),old=CVE.k;CVE={k:a[0],i:+a[1]};if(old&&old!==a[0])$("cvs-"+old).innerHTML=cvSecHtml(old);$("cvs-"+a[0]).innerHTML=cvSecHtml(a[0]);var f1=document.querySelector('#cvs-'+a[0]+' [data-cvf="0"]');if(f1)f1.focus();return}
+if(b=t.closest("[data-cvdel]")){var d=b.dataset.cvdel.split(":");ask("Remove this item from your CV?","Remove",function(){CVD.L[d[0]].splice(+d[1],1);if(CVE.k===d[0])CVE={k:null,i:-1};cvSave();$("cvs-"+d[0]).innerHTML=cvSecHtml(d[0])});return}
+if(b=t.closest("[data-cvmv]")){var m=b.dataset.cvmv.split(":"),i=CVD.order.indexOf(m[0]),j=i+(+m[1]);if(j<0||j>=CVD.order.length)return;var x=CVD.order.splice(i,1)[0];CVD.order.splice(j,0,x);cvSave();renderCVEdit();var nb=document.querySelector('[data-cvmv="'+b.dataset.cvmv+'"]');if(m[0]&&document.querySelector('#cvs-'+m[0])){var q=document.querySelector('#cvs-'+m[0]+' [data-cvmv="'+b.dataset.cvmv+'"]');if(q)q.focus()}return}
+b=t.closest("button");if(!b)return;
+if(b.id==="cv-up"){$("cv-in-photo").click();return}
+if(b.id==="cv-rm"){delete CVD.p.photo;cvSave();$("cv-pv").innerHTML="No photo";return}
+if(b.id==="cv-fill"){["name","email","phone","city","linkedin","github","site","photo"].forEach(function(f){if(D.p[f]&&!CVD.p[f])CVD.p[f]=D.p[f]});if(!CVD.p.summary&&D.p.bio)CVD.p.summary=D.p.bio;cvSave();renderCVEdit();toast("Details copied from your portfolio");return}
+if(b.id==="cv-go"){renderCVX();show("cv-view");fitCV();return}
+if(b.id==="cv-clear"){ask("Clear your whole CV on this device? This cannot be undone.","Clear my CV",function(){var tp=CVD.tpl;CVD={p:{},inc:{},order:NEWORD.slice(),L:{},tpl:tp};Object.keys(CVS).forEach(function(q){CVD.inc[q]=(q!=="refs");CVD.L[q]=[]});CVE={k:null,i:-1};cvSave();renderCVEdit();renderHome();toast("CV cleared")});return}
+if(b.id==="cv-back"){show("cv-edit");return}
+if(b.id==="cv-pdf"||b.id==="cv-print"){(b.id==="cv-pdf"?downloadPdf:printDoc)("cv")}});
+document.addEventListener("input",function(e){var t=e.target;if(t.dataset&&t.dataset.cvp){CVD.p[t.dataset.cvp]=t.value;cvSave()}});
+document.addEventListener("change",function(e){var t=e.target;
+if(t.dataset&&t.dataset.cvinc!==undefined){CVD.inc[t.dataset.cvinc]=t.checked;cvSave();return}
+if(t.dataset&&t.dataset.cvrefs!==undefined){CVD.refsOnReq=t.checked;if(t.checked)CVD.inc.refs=true;cvSave();$("cvs-refs").innerHTML=cvSecHtml("refs");var c=document.querySelector("#cvs-refs [data-cvrefs]");if(c)c.focus();return}
+if(t.id==="cv-in-photo"){var f=t.files[0];if(!f)return;if(!/^image\/(png|jpeg|webp)$/.test(f.type)||f.size>8e6){toast("Please choose a PNG, JPEG or WebP image smaller than 8 MB.",1);t.value="";return}var rd=new FileReader();rd.onload=function(){var im=new Image();im.onload=function(){var m=Math.min(im.width,im.height),c=document.createElement("canvas");c.width=c.height=420;var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,420,420);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,420,420);CVD.p.photo=c.toDataURL("image/jpeg",0.85);cvSave();$("cv-pv").innerHTML='<img src="'+CVD.p.photo+'" alt="">';toast("Photo added")};im.onerror=function(){toast("This file is not a supported image",1)};im.src=rd.result};rd.readAsDataURL(f);t.value=""}});
+/* bundled offline configuration */
+var CFG0={};
+function cl(s,n){return String(s==null?"":s).replace(/[<>&"]/g,"").trim().slice(0,n||80)}
+function okMail(v){return /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(v||"")}
+function sanitizeCfg(c){var o={};if(!c||typeof c!=="object")return o;
+if(typeof c.email==="string"&&okMail(c.email.trim()))o.email=c.email.trim();
+if(Array.isArray(c.hidden))o.hidden=c.hidden.filter(function(k){return typeof k==="string"&&/^[a-z0-9_]{1,40}$/.test(k)});
+if(Array.isArray(c.custom))o.custom=c.custom.filter(function(x){return x&&typeof x.id==="string"&&/^c_[a-z0-9_]{1,30}$/.test(x.id)&&cl(x.n)}).slice(0,20).map(function(x){var f=function(a){return (Array.isArray(a)?a:[]).map(function(s){return cl(s,60)}).filter(Boolean).slice(0,12)},e=f(x.e);return{id:x.id,n:cl(x.n,40),d:f(x.d),en:cl(x.en,60)||"Works and activities",e:e.length?e:["Title"]}});
+if(c.home&&typeof c.home==="object"){o.home={};["cv","pf"].forEach(function(k){var v=c.home[k];if(v&&typeof v==="object")o.home[k]={title:cl(v.title,60),desc:cl(v.desc,300),button:cl(v.button,50),link:typeof v.link==="string"?v.link.trim().slice(0,500):"",enabled:v.enabled!==false,order:Math.max(1,Math.min(2,+v.order||HOMEDEF[k].order))}})}
+if(Array.isArray(c.fieldOrder))o.fieldOrder=c.fieldOrder.filter(function(k,i,a){return typeof k==="string"&&/^[a-z0-9_]{1,40}$/.test(k)&&a.indexOf(k)===i}).slice(0,40);
+if(c.fieldMeta&&typeof c.fieldMeta==="object"){o.fieldMeta={};Object.keys(c.fieldMeta).forEach(function(k){var v=c.fieldMeta[k];if(/^[a-z0-9_]{1,40}$/.test(k)&&v&&typeof v==="object")o.fieldMeta[k]={n:cl(v.n,40),desc:cl(v.desc,240)}})}
+if(c.cards&&typeof c.cards==="object"){o.cards={};["cv","pf"].forEach(function(k){var v=c.cards[k];if(v===""||v===null)o.cards[k]="";else if(okCard(v))o.cards[k]=v})}
+if(c.logo===""||c.logo===null)o.logo="";else if(okCard(c.logo))o.logo=c.logo;
+return o}
+function eff(){return{hidden:CFG0.hidden||[],custom:CFG0.custom||[],cards:Object.assign({},CFG0.cards),home:Object.assign({},CFG0.home),fieldOrder:CFG0.fieldOrder||[],fieldMeta:Object.assign({},CFG0.fieldMeta),logo:CFG0.logo||""}}
+function applyEff(){var E=eff();
+Object.keys(CATS).forEach(function(k){delete CATS[k]});Object.keys(CATBASE).forEach(function(k){CATS[k]=JSON.parse(JSON.stringify(CATBASE[k]))});
+E.custom.forEach(function(c){CATS[c.id]={n:c.n,d:c.d.map(function(x){return [x]}),en:c.en,e:c.e.map(function(x){return [x]})}});
+Object.keys(E.fieldMeta||{}).forEach(function(k){if(CATS[k]){if(E.fieldMeta[k].n)CATS[k].n=E.fieldMeta[k].n;CATS[k].desc=E.fieldMeta[k].desc||""}});
+HID={};E.hidden.forEach(function(k){HID[k]=1});
+D.cats=D.cats.filter(function(k){return CATS[k]&&!HID[k]});
+renderHome();setLogo();renderCats()}
+function loadCfg(){var done=false;function fin(c){if(done)return;done=true;if(c)CFG0=sanitizeCfg(c);applyEff()}
+try{if(!document.querySelector('meta[name="pathpolio-config"]')){fin();return}fetch("config.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(fin,function(){fin()})}catch(e){fin()}
+setTimeout(function(){fin()},2500)}
+if(!PDFOK){var nt=$("notice");nt.textContent=t("PDF export is not available in this browser. You can still fill in and save everything. Open Pathfolio in Chrome, Edge, Firefox or Safari to create a PDF.");nt.hidden=false}
+window.addEventListener("offline",function(){toast("You are offline. You can keep working. Everything is saved on this device.")});
+window.addEventListener("online",function(){toast("You are back online.")});
+if("serviceWorker" in navigator&&location.protocol==="https:"&&document.querySelector('link[rel="manifest"]')){try{navigator.serviceWorker.register("sw.js").catch(function(){})}catch(e){}}
+showPhoto();renderLists();renderHome();loadCfg();startI18n();
+})();
+</script>
+</body>
+</html>

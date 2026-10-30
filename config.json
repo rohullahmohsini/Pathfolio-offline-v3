@@ -1,0 +1,12 @@
+{
+  "hidden": [],
+  "custom": [],
+  "cards": {},
+  "home": {
+    "cv": {"title":"Create Your CV","desc":"Choose a professional template, add your information and download a polished CV for scholarships, education and job applications.","button":"Create Your CV","link":"","enabled":true,"order":1},
+    "pf": {"title":"Create Your Portfolio","desc":"Showcase your field of study, skills, projects, creative work and achievements in a personalized portfolio.","button":"Create Your Portfolio","link":"","enabled":true,"order":2}
+  },
+  "fieldOrder": [],
+  "fieldMeta": {},
+  "logo": ""
+}
